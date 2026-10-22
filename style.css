@@ -1,0 +1,248 @@
+{body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background: #f5f5f5;
+  }
+h1 {
+    h1 {
+    font-size: 32px;
+    margin-bottom: 15px;
+    }
+p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #111;
+}
+
+nav h2 {
+    margin: 0;
+    color: white;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+.services {
+    padding: 40px 20px;
+}
+
+.services h2 {
+    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+.service-container {
+    display: grid;
+    gap: 20px;
+}
+
+.service-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.service-card h3 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.service-card p {
+    margin-bottom: 0;
+@media (min-width: 700px) {
+
+    .service-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+.get-started {
+    display: inline-block;
+    padding: 12px 25px;
+    background: #111;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 20px;
+}.contact {
+    padding:.register {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.register h1 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.register > p {
+    text-align: center;
+    line-height: 1.5;
+}
+
+.register form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+}
+
+.register label {
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.register input {
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 16px;
+}
+
+.register button {
+    margin-top: 25px;
+    padding: 13px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+} 50px 20px;
+    text-align: center;
+    background: white;
+    margin-top: 30px;
+}
+
+.contact h2 {
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.contact p {
+    margin: 10px 0;
+}
+
+.contact-button {
+    display: inline-block;
+    padding: 13px 25px;
+    margin: 20px 0;
+    background: #111;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}.login {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login h1 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.login > p {
+    text-align: center;
+    line-height: 1.5;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+}
+
+.login label {
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.login input {
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 16px;
+}
+
+.login button {
+    margin-top: 25px;
+    padding: 13px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+}
+}
+      .login {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login h1 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.login > p {
+    text-align: center;
+    line-height: 1.5;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+}
+
+.login label {
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.login input {
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 16px;
+}
+
+.login button {
+    margin-top: 25px;
+    padding: 13px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+}

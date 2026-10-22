@@ -1,248 +1,715 @@
-{body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    background: #f5f5f5;
-  }
-h1 {
-    h1 {
-    font-size: 32px;
-    margin-bottom: 15px;
-    }
-p {
-    font-size: 18px;
-    line-height: 1.6;
+/* ================================
+   MICHAELVENTURE WEBSITE
+   BRAND DESIGN
+   ================================ */
+
+:root {
+    --green: #116530;
+    --dark-green: #0A3D1E;
+    --black: #000000;
+    --white: #ffffff;
+    --light-bg: #f5f8f6;
+    --text: #222222;
+    --muted: #666666;
+    --border: #dce7df;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-button {
-    padding: 12px 25px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  nav {
+/* ================================
+   GENERAL
+   ================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.7;
+}
+
+/* ================================
+   NAVIGATION
+   ================================ */
+
+nav {
+    width: 100%;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 15px 6%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    background: #111;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
 }
 
 nav h2 {
-    margin: 0;
-    color: white;
+    color: var(--dark-green);
+    font-size: 22px;
+    font-weight: 800;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 15px;
-.services {
-    padding: 40px 20px;
-}
-
-.services h2 {
-    font-size: 30px;
-    margin-bottom: 25px;
-}
-
-.service-container {
-    display: grid;
+nav div {
+    display: flex;
+    align-items: center;
     gap: 20px;
 }
 
+nav a {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: var(--green);
+}
+
+/* ================================
+   HERO / HOME
+   ================================ */
+
+body > h1 {
+    min-height: 70vh;
+    padding: 120px 8% 80px;
+    display: flex;
+    align-items: center;
+    background:
+        linear-gradient(
+            120deg,
+            rgba(10, 61, 30, 0.97),
+            rgba(17, 101, 48, 0.88)
+        );
+    color: var(--white);
+    font-size: clamp(38px, 6vw, 70px);
+    line-height: 1.15;
+    max-width: 100%;
+}
+
+/* ================================
+   MAIN INTRO TEXT
+   ================================ */
+
+body > p {
+    max-width: 900px;
+    margin: 35px auto;
+    padding: 0 25px;
+    color: var(--muted);
+    font-size: 18px;
+    text-align: center;
+}
+
+/* ================================
+   BUTTON
+   ================================ */
+
+.get-started {
+    display: inline-block;
+    margin: 10px auto 60px;
+    padding: 14px 28px;
+    background: var(--green);
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.get-started:hover {
+    background: var(--dark-green);
+    transform: translateY(-2px);
+}
+
+/* ================================
+   SECTIONS
+   ================================ */
+
+section {
+    padding: 80px 7%;
+}
+
+section h2 {
+    text-align: center;
+    font-size: 36px;
+    color: var(--dark-green);
+    margin-bottom: 45px;
+}
+
+/* ================================
+   SERVICES
+   ================================ */
+
+.services {
+    background: var(--light-bg);
+}
+
+.service-container {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
 .service-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: var(--white);
+    padding: 30px 25px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--green);
 }
 
 .service-card h3 {
-    margin-top: 0;
-    font-size: 20px;
+    color: var(--dark-green);
+    font-size: 21px;
+    margin-bottom: 12px;
 }
 
 .service-card p {
-    margin-bottom: 0;
-@media (min-width: 700px) {
-
-    .service-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-.get-started {
-    display: inline-block;
-    padding: 12px 25px;
-    background: #111;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    margin-top: 20px;
-}.contact {
-    padding:.register {
-    max-width: 450px;
-    margin: 40px auto;
-    padding: 30px 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: var(--muted);
+    font-size: 15px;
 }
 
-.register h1 {
+/* ================================
+   CONTACT
+   ================================ */
+
+.contact {
+    background: var(--white);
     text-align: center;
-    font-size: 30px;
-    margin-bottom: 10px;
-}
-
-.register > p {
-    text-align: center;
-    line-height: 1.5;
-}
-
-.register form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 25px;
-}
-
-.register label {
-    margin-top: 15px;
-    margin-bottom: 6px;
-    font-weight: bold;
-}
-
-.register input {
-    padding: 13px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    font-size: 16px;
-}
-
-.register button {
-    margin-top: 25px;
-    padding: 13px;
-    background: #111;
-    color: white;
-    border: none;
-    border-radius: 7px;
-    font-size: 16px;
-} 50px 20px;
-    text-align: center;
-    background: white;
-    margin-top: 30px;
-}
-
-.contact h2 {
-    font-size: 30px;
-    margin-bottom: 15px;
 }
 
 .contact p {
-    margin: 10px 0;
+    max-width: 700px;
+    margin: 12px auto;
+    color: var(--muted);
 }
 
-.contact-button {
+.contact a {
     display: inline-block;
-    padding: 13px 25px;
-    margin: 20px 0;
-    background: #111;
+    margin-top: 20px;
+    padding: 14px 25px;
+    background: #25D366;
     color: white;
     text-decoration: none;
     border-radius: 8px;
-}.login {
-    max-width: 450px;
-    margin: 40px auto;
-    padding: 30px 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+    transition: 0.3s;
 }
 
-.login h1 {
+.contact a:hover {
+    transform: translateY(-3px);
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+
+footer {
+    background: var(--dark-green);
+    color: var(--white);
     text-align: center;
-    font-size: 30px;
+    padding: 35px 20px;
+    margin-top: 30px;
+}
+
+footer h2 {
     margin-bottom: 10px;
 }
 
-.login > p {
-    text-align: center;
-    line-height: 1.5;
+footer p {
+    color: #d7e5dc;
+    font-size: 14px;
 }
 
-.login form {
+/* ================================
+   MOBILE RESPONSIVENESS
+   ================================ */
+
+@media (max-width: 800px) {
+
+    nav {
+        padding: 14px 5%;
+    }
+
+    nav div {
+        gap: 10px;
+    }
+
+    nav a {
+        font-size: 13px;
+    }
+
+    body > h1 {
+        min-height: 55vh;
+        padding: 80px 7% 60px;
+        font-size: 40px;
+    }
+
+    section {
+        padding: 60px 5%;
+    }
+
+    section h2 {
+        font-size: 30px;
+    }
+
+    .service-container {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card {
+        padding: 25px 20px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    nav {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    nav div {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    body > h1 {
+        font-size: 34px;
+        text-align: center;
+        justify-content: center;
+    }
+
+    body > p {
+        font-size: 16px;
+    }
+  /* ================================
+   MOBILE & HEADER IMPROVEMENT
+================================ */
+
+.header {
+    background: #ffffff;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #dce7df;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #0a3d1e;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #0a3d1e;
+}
+
+.mv-logo {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.mv-logo svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.navigation a {
+    color: #222222;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.navigation a:hover {
+    color: #116530;
+}
+
+/* HERO */
+
+.hero {
+    padding: 80px 25px;
+    background: #f5f8f6;
+}
+
+.hero-content {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.hero h1 {
+    color: #0a3d1e;
+    font-size: clamp(38px, 7vw, 68px);
+    line-height: 1.08;
+    margin: 15px 0 25px;
+}
+
+.hero-text {
+    max-width: 700px;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #555555;
+}
+
+.small-title {
+    color: #116530;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 700px) {
+
+    .header {
+        flex-direction: column;
+        align-items: center;
+        padding: 18px 15px;
+    }
+
+    .navigation {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px 18px;
+    }
+
+    .navigation a {
+        font-size: 14px;
+    }
+
+    .hero {
+        padding: 55px 20px;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .hero-text {
+        font-size: 16px;
+        line-height: 1.7;
+    }
+}
+@media (max-width: 768px) {
+    .navigation {
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .navigation a {
+        font-size: 18px;
+    }
+}
+/* MOBILE MENU FIX */
+.menu-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    .navigation {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 25px;
+    }
+
+    .navigation.active {
+        display: flex;
+    }
+} /* MichaelVenture Welcome Page */
+
+.welcome-container {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    margin-top: 25px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
 }
 
-.login label {
-    margin-top: 15px;
-    margin-bottom: 6px;
+.welcome-container h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    color: #064d2f;
+}
+
+.welcome-container p {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.auth-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.auth-buttons a {
+    text-decoration: none;
+    background: #064d2f;
+    color: white;
+    padding: 13px 25px;
+    border-radius: 8px;
     font-weight: bold;
 }
 
-.login input {
-    padding: 13px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    font-size: 16px;
+.auth-buttons a:hover {
+    background: #087a49;
 }
 
-.login button {
-    margin-top: 25px;
-    padding: 13px;
-    background: #111;
+@media (max-width: 600px) {
+    .welcome-container h1 {
+        font-size: 32px;
+    }
+
+    .welcome-container p {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .auth-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .auth-buttons a {
+        width: 100%;
+        text-align: center;
+    }
+}/* GLOBAL FOOTER */
+.site-footer {
+    width: 100%;
+    background: #063f2b;
+    color: white;
+    text-align: center;
+    padding: 20px 15px;
+    margin-top: 40px;
+    font-size: 14px;
+}
+
+.site-footer p {
+    margin: 0;
+}
+
+.site-footer strong {
+    color: #ffffff;
+}.site-footer {
+    text-align: center;
+    padding: 25px 15px;
+    margin-top: 30px;
+    color: #075c3b;
+    font-size: 14px;
+}/* =========================
+   REGISTER / LOGIN AUTH PAGES
+   ========================= */
+
+.auth-container {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 50px 25px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.logo-circle {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 20px;
+    background: #075c3b;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.auth-container h1 {
+    color: #075c3b;
+    font-size: 32px;
+    margin: 0 0 10px;
+}
+
+.auth-container h2 {
+    font-size: 28px;
+    margin: 10px 0;
+}
+
+.auth-subtitle {
+    color: #555;
+    margin-bottom: 30px;
+}
+
+#registerForm,
+#loginForm {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #075c3b;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 5px;
+    background: #075c3b;
     color: white;
     border: none;
-    border-radius: 7px;
+    border-radius: 8px;
     font-size: 16px;
-}
-}
-      .login {
-    max-width: 450px;
-    margin: 40px auto;
-    padding: 30px 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.login h1 {
+.auth-button:hover {
+    background: #064c32;
+}
+
+.auth-link {
+    margin-top: 20px;
+    color: #555;
+}
+
+.auth-link a,
+.back-home a {
+    color: #075c3b;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.back-home {
+    margin-top: 15px;
+}
+
+.site-footer {
     text-align: center;
-    font-size: 30px;
-    margin-bottom: 10px;
+    padding: 25px 15px;
+    margin-top: 30px;
+    color: #075c3b;
+    font-size: 14px;
+}
+/* MICHAELVENTURE RESPONSIVE DESIGN */
+
+.welcome-container {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    box-sizing: border-box;
+    padding: 24px 16px;
+    margin: 0 auto;
 }
 
-.login > p {
-    text-align: center;
-    line-height: 1.5;
+.welcome-container h1 {
+    font-size: clamp(28px, 6vw, 42px);
+    line-height: 1.3;
+    overflow-wrap: anywhere;
 }
 
-.login form {
+.welcome-container p {
+    font-size: clamp(16px, 3.5vw, 20px);
+    line-height: 1.6;
+}
+
+.auth-buttons {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    margin-top: 25px;
+    gap: 14px;
 }
 
-.login label {
-    margin-top: 15px;
-    margin-bottom: 6px;
-    font-weight: bold;
+.auth-buttons a {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 15px 12px;
 }
 
-.login input {
-    padding: 13px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    font-size: 16px;
-}
-
-.login button {
-    margin-top: 25px;
-    padding: 13px;
-    background: #111;
-    color: white;
-    border: none;
-    border-radius: 7px;
-    font-size: 16px;
+@media (min-width: 768px) {
+    .welcome-container {
+        padding: 40px 24px;
+    }
 }

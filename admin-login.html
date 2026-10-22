@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - MichaelVenture</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: #f5f7fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 35px 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #0f5132;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #172033;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #667085;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #344054;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d0d5dd;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #0f5132;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+        }
+
+        .message {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .error {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .success {
+            background: #ecfdf3;
+            color: #027a48;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #667085;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="logo">
+        MV
+    </div>
+
+    <h1>Admin Login</h1>
+
+    <p class="subtitle">
+        MichaelVenture Administrator Portal
+    </p>
+
+    <form id="adminLoginForm">
+
+        <label for="email">
+            Email Address
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter admin email"
+            required
+        >
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            required
+        >
+
+        <button type="submit" id="loginButton">
+            Login as Administrator
+        </button>
+
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <a href="login.html" class="back">
+        ← Back to Customer Login
+    </a>
+
+    <footer>
+        © 2026 MichaelVenture. All Rights Reserved.
+    </footer>
+
+</div>
+
+
+<script>
+
+    const client = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY
+    );
+
+
+    const form =
+        document.getElementById("adminLoginForm");
+
+    const button =
+        document.getElementById("loginButton");
+
+    const message =
+        document.getElementById("message");
+
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className =
+            "message " + type;
+
+        message.style.display = "block";
+    }
+
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("email")
+                .value
+                .trim();
+
+        const password =
+            document.getElementById("password")
+                .value;
+
+
+        button.disabled = true;
+
+        button.textContent = "Checking...";
+
+        message.style.display = "none";
+
+
+        /*
+         * First authenticate the account.
+         */
+
+        const { data, error } =
+            await client.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+
+        if (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Invalid email or password.",
+                "error"
+            );
+
+            button.disabled = false;
+
+            button.textContent =
+                "Login as Administrator";
+
+            return;
+        }
+
+
+        const user =
+            data.user;
+
+
+        /*
+         * Now check whether this account
+         * is actually an administrator.
+         */
+
+        const { data: admin, error: adminError } =
+            await client
+                .from("admin_users")
+                .select("user_id")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+
+        if (adminError) {
+
+            console.error(adminError);
+
+            await client.auth.signOut();
+
+            showMessage(
+                "Unable to verify administrator access.",
+                "error"
+            );
+
+            button.disabled = false;
+
+            button.textContent =
+                "Login as Administrator";
+
+            return;
+        }
+
+
+        if (!admin) {
+
+            await client.auth.signOut();
+
+            showMessage(
+                "Access denied. This account is not an administrator.",
+                "error"
+            );
+
+            button.disabled = false;
+
+            button.textContent =
+                "Login as Administrator";
+
+            return;
+        }
+
+
+        /*
+         * Administrator verified.
+         */
+
+        showMessage(
+            "Administrator verified. Opening dashboard...",
+            "success"
+        );
+
+
+        setTimeout(function() {
+
+            window.location.href =
+                "admin.html";
+
+        }, 700);
+
+    });
+
+</script>
+
+</body>
+</html>

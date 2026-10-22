@@ -1,47 +1,476 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Login - MichaelVenture</title>
 
-    <link rel="stylesheet" href="./style.css?v=2">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: #f2f7f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-page {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .logo-circle {
+            width: 145px;
+            height: 145px;
+            border: 6px solid #075c3e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            color: #075c3e;
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .auth-logo h1 {
+            color: #075c3e;
+            font-size: 38px;
+            margin-bottom: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #064b35;
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 20px;
+            line-height: 1.5;
+            margin-bottom: 45px;
+        }
+
+        #resetMessage {
+            display: none;
+            text-align: center;
+            line-height: 1.5;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 0 0 20px;
+            overflow-wrap: anywhere;
+        }
+
+        #resetMessage.visible {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 35px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 14px;
+            color: #333;
+            font-weight: bold;
+            font-size: 21px;
+        }
+
+        input {
+            width: 100%;
+            padding: 24px;
+            border: 2px solid #ccc;
+            border-radius: 17px;
+            font-size: 20px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #075c3e;
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 25px;
+            background: #075c3e;
+            color: white;
+            border: none;
+            border-radius: 17px;
+            font-size: 23px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .auth-button:disabled {
+            opacity: 0.65;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 35px;
+        }
+
+        .forgot-password a,
+        .auth-link a,
+        .back-home a {
+            color: #075c3e;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        #loginMessage {
+            text-align: center;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 55px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .site-footer {
+            text-align: center;
+            padding: 20px 0 0;
+            color: #666;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .auth-card {
+                padding: 28px 22px;
+                border-radius: 25px;
+            }
+
+            .auth-logo {
+                margin-bottom: 35px;
+            }
+
+            .logo-circle {
+                width: 110px;
+                height: 110px;
+                font-size: 38px;
+            }
+
+            .auth-logo h1 {
+                font-size: 30px;
+            }
+
+            h2 {
+                font-size: 30px;
+                margin-bottom: 25px;
+            }
+
+            .auth-subtitle {
+                font-size: 17px;
+                margin-bottom: 35px;
+            }
+
+            label {
+                font-size: 18px;
+            }
+
+            input {
+                padding: 19px;
+                font-size: 17px;
+            }
+
+            .auth-button {
+                padding: 20px;
+                font-size: 19px;
+            }
+
+            .auth-link {
+                margin-top: 40px;
+                font-size: 16px;
+            }
+
+            .forgot-password a,
+            .auth-link a,
+            .back-home a {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 
-    <section class="login">
-        <h1>Welcome Back</h1>
+<body>
 
-        <p>Login to your MichaelVenture account.</p>
+<main class="auth-page">
+    <div class="auth-card">
 
-        <form>
+        <div class="auth-logo">
+            <div class="logo-circle">MV</div>
+            <h1>MichaelVenture</h1>
+        </div>
 
-            <label for="login-email">Email Address</label>
-            <input
-                type="email"
-                id="login-email"
-                placeholder="Enter your email"
-            >
+        <h2 id="pageTitle">Welcome Back</h2>
 
-            <label for="login-password">Password</label>
-            <input
-                type="password"
-                id="login-password"
-                placeholder="Enter your password"
-            >
+        <p class="auth-subtitle" id="pageSubtitle">
+            Login to your MichaelVenture account.
+        </p>
 
-            <button type="submit">Login</button>
+        <p id="resetMessage" role="status" aria-live="polite"></p>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="form-group" id="passwordGroup">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="auth-button" id="loginButton">
+                Login
+            </button>
+
+            <p id="loginMessage" role="status" aria-live="polite"></p>
 
         </form>
 
-        <p>
-            Don't have an account?
-            <a href="register.html">Create an account</a>
-        </p>
+        <div class="forgot-password">
+            <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+        </div>
 
-    </section>
+        <div class="auth-link" id="registerLink">
+            Don't have an account?
+            <a href="register.html">Create Account</a>
+        </div>
+
+        <div class="back-home">
+            <a href="index.html">← Back to Home</a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 <strong>MichaelVenture</strong>. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<script>
+const client = window.supabase.createClient(
+    window.SUPABASE_URL,
+    window.SUPABASE_KEY
+);
+
+const form = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const passwordGroup = document.getElementById("passwordGroup");
+const loginButton = document.getElementById("loginButton");
+const loginMessage = document.getElementById("loginMessage");
+const resetMessage = document.getElementById("resetMessage");
+const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+const pageTitle = document.getElementById("pageTitle");
+const pageSubtitle = document.getElementById("pageSubtitle");
+const registerLink = document.getElementById("registerLink");
+
+let resetMode = false;
+
+function showResetMessage(message, type) {
+    resetMessage.textContent = message;
+    resetMessage.className = "visible";
+    resetMessage.style.color = type === "error" ? "#c62828" : "#075c3e";
+    resetMessage.style.background =
+        type === "error" ? "#ffebee" : "#e8f5e9";
+}
+
+function clearMessages() {
+    resetMessage.textContent = "";
+    resetMessage.className = "";
+    loginMessage.textContent = "";
+}
+
+forgotPasswordLink.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    resetMode = !resetMode;
+    clearMessages();
+
+    if (resetMode) {
+        pageTitle.textContent = "Reset Password";
+        pageSubtitle.textContent =
+            "Enter your email address and we will send you a password-reset link.";
+
+        passwordGroup.style.display = "none";
+        passwordInput.required = false;
+        passwordInput.value = "";
+
+        loginButton.textContent = "Send Reset Link";
+        forgotPasswordLink.textContent = "← Back to Login";
+        registerLink.style.display = "none";
+
+        showResetMessage(
+            "Enter your email address below to continue.",
+            "info"
+        );
+    } else {
+        pageTitle.textContent = "Welcome Back";
+        pageSubtitle.textContent =
+            "Login to your MichaelVenture account.";
+
+        passwordGroup.style.display = "";
+        passwordInput.required = true;
+
+        loginButton.textContent = "Login";
+        forgotPasswordLink.textContent = "Forgot Password?";
+        registerLink.style.display = "";
+
+        clearMessages();
+    }
+});
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = emailInput.value.trim();
+
+    if (!email) {
+        if (resetMode) {
+            showResetMessage(
+                "Enter your email address above first.",
+                "error"
+            );
+        } else {
+            loginMessage.textContent = "Please enter your email address.";
+        }
+        return;
+    }
+
+    loginButton.disabled = true;
+
+    try {
+        if (resetMode) {
+            loginButton.textContent = "Sending...";
+
+            const { error } = await client.auth.resetPasswordForEmail(
+                email,
+                {
+                    redirectTo:
+                        "http://localhost:8158/reset-password.html"
+                }
+            );
+
+            if (error) {
+                showResetMessage(error.message, "error");
+                return;
+            }
+
+            showResetMessage(
+                "Check your email for the password-reset link. Also check your spam folder.",
+                "success"
+            );
+
+            return;
+        }
+
+        const password = passwordInput.value;
+
+        loginButton.textContent = "Logging in...";
+        loginMessage.style.color = "#075c3e";
+        loginMessage.textContent = "Please wait...";
+
+        const { data, error } = await client.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            loginMessage.style.color = "red";
+            loginMessage.textContent = error.message;
+            return;
+        }
+
+        if (!data.session) {
+            loginMessage.style.color = "red";
+            loginMessage.textContent =
+                "No login session was created. Please try again.";
+            return;
+        }
+
+        loginMessage.style.color = "green";
+        loginMessage.textContent = "Login successful! Opening dashboard...";
+
+        window.location.href = "dashboard.html";
+
+    } catch (error) {
+        if (resetMode) {
+            showResetMessage(
+                "Unable to complete the request. Check your internet connection and try again.",
+                "error"
+            );
+        } else {
+            loginMessage.style.color = "red";
+            loginMessage.textContent =
+                "A connection error occurred. Please try again.";
+        }
+
+        console.error(error);
+
+    } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = resetMode ? "Send Reset Link" : "Login";
+    }
+});
+</script>
 
 </body>
-
-</>
+</html>

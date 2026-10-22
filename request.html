@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Requests - MichaelVenture</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: auto;
+            padding: 30px 18px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            margin: auto;
+            border-radius: 50%;
+            background: #075b3d;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #075b3d;
+            margin: 15px 0 8px;
+        }
+
+        .subtitle {
+            color: #667085;
+        }
+
+        .request-card {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.07);
+        }
+
+        .service {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .pending {
+            background: #fff3e6;
+            color: #b54708;
+        }
+
+        .processing {
+            background: #eaf2ff;
+            color: #175cd3;
+        }
+
+        .completed {
+            background: #ecfdf3;
+            color: #027a48;
+        }
+
+        .cancelled {
+            background: #fef3f2;
+            color: #b42318;
+        }
+
+        .info {
+            line-height: 1.8;
+            color: #475467;
+        }
+
+        .info strong {
+            color: #172033;
+        }
+
+        .details {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8f9fc;
+            line-height: 1.6;
+        }
+
+        .date {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #667085;
+        }
+
+        .message {
+            text-align: center;
+            padding: 30px;
+            color: #667085;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin: 30px;
+            color: #075b3d;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #667085;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div class="logo">MV</div>
+
+        <h1>My Requests</h1>
+
+        <p class="subtitle">
+            Track the services you have requested.
+        </p>
+
+    </div>
+
+    <div id="requestsContainer">
+
+        <div class="message">
+            Loading your requests...
+        </div>
+
+    </div>
+
+    <a href="dashboard.html" class="back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+<footer>
+    © 2026 MichaelVenture. All Rights Reserved.
+</footer>
+
+
+<script>
+
+const client = window.supabase.createClient(
+    window.SUPABASE_URL,
+    window.SUPABASE_KEY
+);
+
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function statusClass(status) {
+
+    const value =
+        String(status || "Pending").toLowerCase();
+
+    if (value === "processing") {
+        return "processing";
+    }
+
+    if (value === "completed") {
+        return "completed";
+    }
+
+    if (value === "cancelled") {
+        return "cancelled";
+    }
+
+    return "pending";
+}
+
+
+function statusIcon(status) {
+
+    const value =
+        String(status || "Pending").toLowerCase();
+
+    if (value === "processing") return "🔵";
+
+    if (value === "completed") return "🟢";
+
+    if (value === "cancelled") return "🔴";
+
+    return "🟠";
+}
+
+
+async function loadRequests() {
+
+    const box =
+        document.getElementById("requestsContainer");
+
+
+    try {
+
+        const {
+            data: { session },
+            error: sessionError
+        } = await client.auth.getSession();
+
+
+        if (sessionError) {
+            throw sessionError;
+        }
+
+
+        if (!session) {
+
+            window.location.href = "login.html";
+
+            return;
+        }
+
+
+        const { data, error } = await client
+            .from("service_requests")
+            .select("*")
+            .eq("user_id", session.user.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!data || data.length === 0) {
+
+            box.innerHTML = `
+                <div class="request-card message">
+
+                    <div style="font-size:45px;">
+                        📋
+                    </div>
+
+                    <h3>
+                        No Requests Yet
+                    </h3>
+
+                    <p>
+                        You have not submitted any service requests.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        box.innerHTML = data.map(request => {
+
+            const status =
+                request.status || "Pending";
+
+            const date =
+                request.created_at
+                ? new Date(
+                    request.created_at
+                  ).toLocaleString()
+                : "Not available";
+
+
+            return `
+
+                <div class="request-card">
+
+                    <div class="service">
+                        ${escapeHTML(request.service_name)}
+                    </div>
+
+                    <div class="status ${statusClass(status)}">
+                        ${statusIcon(status)}
+                        ${escapeHTML(status)}
+                    </div>
+
+                    <div class="info">
+
+                        <div>
+                            <strong>Name:</strong>
+                            ${escapeHTML(request.full_name)}
+                        </div>
+
+                        <div>
+                            <strong>Phone:</strong>
+                            ${escapeHTML(request.phone)}
+                        </div>
+
+                        ${
+                            request.jamb_number
+                            ? `
+                                <div>
+                                    <strong>
+                                        JAMB Reg. / Matric /
+                                        Business Email:
+                                    </strong>
+                                    ${escapeHTML(request.jamb_number)}
+                                </div>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+                    ${
+                        request.details
+                        ? `
+                            <div class="details">
+
+                                <strong>
+                                    Additional Information:
+                                </strong>
+
+                                <div style="margin-top:8px;">
+                                    ${escapeHTML(request.details)}
+                                </div>
+
+                            </div>
+                        `
+                        : ""
+                    }
+
+                    <div class="date">
+                        Submitted: ${escapeHTML(date)}
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+    }
+
+    catch (error) {
+
+        console.error("REQUEST ERROR:", error);
+
+        box.innerHTML = `
+
+            <div class="request-card message">
+
+                <div style="font-size:40px;">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Unable to load your requests
+                </h3>
+
+                <p>
+                    Please refresh the page and try again.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+loadRequests();
+
+</script>
+
+</body>
+</html>

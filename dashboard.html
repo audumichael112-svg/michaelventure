@@ -1,37 +1,612 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dashboard - MichaelVenture</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f8f6;
+            color: #222;
+        }
+
+        .dashboard-page {
+            min-height: 100vh;
+            padding: 25px 15px 40px;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .dashboard-header {
+            background: #075c3b;
+            color: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .logo-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: white;
+            color: #075c3b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .logo-row h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .welcome-text {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .user-email {
+            margin-top: 8px;
+            opacity: 0.85;
+            font-size: 15px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px 18px;
+            text-decoration: none;
+            color: #222;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+
+        .dashboard-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .dashboard-card h3 {
+            margin: 0 0 7px;
+            color: #075c3b;
+            font-size: 18px;
+        }
+
+        .dashboard-card p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .section {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.05);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #075c3b;
+            font-size: 21px;
+        }
+
+        .quick-service {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .quick-service:last-child {
+            border-bottom: none;
+        }
+
+        .quick-service strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .quick-service span {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .service-button {
+            background: #075c3b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 13px;
+            font-weight: bold;
+        }
+
+        .logout-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #b42318;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .message {
+            text-align: center;
+            color: #666;
+            padding: 15px;
+        }
+
+        .site-footer {
+            text-align: center;
+            padding: 25px 15px;
+            margin-top: 30px;
+            background: #075c3b;
+            color: white;
+            font-size: 14px;
+        }
+
+        .site-footer strong {
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .welcome-text {
+                font-size: 24px;
+            }
+
+            .dashboard-header {
+                padding: 25px 20px;
+            }
+
+            .dashboard-card {
+                padding: 18px 14px;
+            }
+
+            .card-icon {
+                font-size: 26px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <section class="dashboard">
+    <main class="dashboard-page">
 
-        <h1>Welcome to MichaelVenture</h1>
+        <div class="dashboard-container">
 
-        <p>Your personal dashboard</p>
+            <!-- HEADER -->
+            <section class="dashboard-header">
 
-        <div class="dashboard-menu">
+                <div class="logo-row">
+                    <div class="logo-circle">MV</div>
 
-            <a href="#">My Profile</a>
+                    <h1>MichaelVenture</h1>
+                </div>
 
-            <a href="#">Our Services</a>
+                <h2 class="welcome-text">
+                    Welcome back 👋
+                </h2>
 
-            <a href="#">My Requests</a>
+                <p class="user-email" id="userEmail">
+                    Loading account...
+                </p>
 
-            <a href="index.html">Back to Home</a>
+            </section>
 
-            <button>Logout</button>
+
+            <!-- DASHBOARD MENU -->
+            <section class="dashboard-grid">
+
+                <a href="profile.html" class="dashboard-card">
+                    <div class="card-icon">👤</div>
+                    <h3>My Profile</h3>
+                    <p>View and manage your account information.</p>
+                </>
+
+
+                <a href="services.html" class="dashboard-card">
+                    <div class="card-icon">🛠️</div>
+                    <h3>Our Services</h3>
+                    <p>Browse MichaelVenture digital and academic services.</p>
+                </>
+
+
+                <a href="requests.html" class="dashboard-card">
+                    <div class="card-icon">📋</div>
+                    <h3>My Requests</h3>
+                    <p>Track services you have requested.</p>
+                </>
+
+
+                <a href="ai-study.html" class="dashboard-card">
+                    <div class="card-icon">🤖</div>
+                    <h3>AI Study Assistant</h3>
+                    <p>Get assistance with assignments and research.</p>
+                </>
+
+
+                <a href="transactions.html" class="dashboard-card">
+                    <div class="card-icon">💳</div>
+                    <h3>Transactions</h3>
+                    <p>View your service payment history.</p>
+                </>
+
+
+                <a href="index.html" class="dashboard-card">
+                    <div class="card-icon">🏠</div>
+                    <h3>Back to Home</h3>
+                    <p>Return to the MichaelVenture homepage.</p>
+                </a>
+
+            </section>
+
+
+            <!-- POPULAR SERVICES -->
+            <section class="section">
+
+                <h2>Popular Services</h2>
+
+                <div class="quick-service">
+                    <div>
+                        <strong>JAMB Admission Letter</strong>
+                        <span>Admission letter printing assistance</span>
+                    </div>
+
+                    <button class="service-button">
+                        Request
+                    </button>
+                </div>
+
+
+                <div class="quick-service">
+                    <div>
+                        <strong>Original JAMB Result</strong>
+                        <span>Original result processing assistance</span>
+                    </div>
+
+                    <button class="service-button">
+                        Request
+                    </button>
+                </div>
+
+
+                <div class="quick-service">
+                    <div>
+                        <strong>O'Level Upload</strong>
+                        <span>WAEC, NECO and NABTEB upload assistance</span>
+                    </div>
+
+                    <button class="service-button">
+                        Request
+                    </button>
+                </div>
+
+
+                <div class="quick-service">
+                    <div>
+                        <strong>Academic Assistance</strong>
+                        <span>Assignments, research and project assistance</span>
+                    </div>
+
+                    <button class="service-button">
+                        Request
+                    </button>
+                </div>
+
+            </section>
+<!-- MICHAELVENTURE OWNER CONTACT -->
+<section class="section" style="
+    background:#ffffff;
+    padding:24px;
+    margin:25px 0;
+    border-radius:18px;
+    border:1px solid #e0e0e0;
+    box-shadow:0 4px 15px rgba(0,0,0,0.06);
+">
+
+    <h2 style="color:#075e3f;margin-top:0;">
+        📞 Contact MichaelVenture
+    </h2>
+
+    <p><strong>Business Name:</strong> MichaelVenture</p>
+
+    <p>
+        <strong>Phone Number:</strong>
+        <a href="tel:09162828702"
+           style="color:#075e3f;text-decoration:none;">
+            09162828702
+        </a>
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+        <a href="mailto:michaelventureteam@gmail.com"
+           style="color:#075e3f;text-decoration:none;">
+            michaelventureteam@gmail.com
+        </a>
+    </p>
+
+    <p>
+        <strong>Location:</strong> Kabba, Kogi State, Nigeria
+    </p>
+<a
+    href="https://wa.me/2349162828702?text=Hello%20MichaelVenture%2C%20I%20need%20assistance%20with%20your%20services."
+    target="_blank"
+    rel="noopener noreferrer"
+    style="
+        display: block;
+        background: #25D366;
+        color: #ffffff;
+        text-align: center;
+        padding: 14px;
+        margin-top: 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+    ">
+    💬 Chat with MichaelVenture
+</a>
+</section>
+<!-- END OWNER CONTACT -->
+            <section class="section">
+
+                <h2>Account</h2>
+
+                <p id="accountStatus" class="message">
+                    Checking your account...
+                </p>
+
+                <button id="logoutButton" class="logout-button">
+                    Logout
+                </button>
+
+            </section>
 
         </div>
 
-    </section>
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <p>
+            © 2026
+            <strong>MichaelVenture</strong>.
+            All Rights Reserved.
+        </p>
+    </footer>
+
+
+    <!-- DASHBOARD JAVASCRIPT -->
+    <script>
+
+        const client = window.supabase.createClient(
+            window.SUPABASE_URL,
+            window.SUPABASE_KEY
+        );
+
+
+        async function loadDashboard() {
+
+            const {
+                data: { session },
+                error
+            } = await client.auth.getSession();
+
+
+            /* USER IS NOT LOGGED IN */
+            if (error || !session) {
+
+                window.location.href = "login.html";
+
+                return;
+            }
+
+
+            /* USER IS LOGGED IN */
+
+            const user = session.user;
+
+
+            const userEmail =
+                document.getElementById("userEmail");
+
+            const accountStatus =
+                document.getElementById("accountStatus");
+
+
+            userEmail.textContent =
+                user.email || "Account user";
+
+
+            accountStatus.textContent =
+                "Your MichaelVenture account is active.";
+
+
+            /*
+                If registration stored the user's
+                full name in user metadata, we can
+                display it later.
+            */
+
+            const fullName =
+                user.user_metadata?.full_name;
+
+
+            if (fullName) {
+
+                document.querySelector(".welcome-text").textContent =
+                    "Welcome back, " + fullName + " 👋";
+
+            }
+
+        }
+
+
+        /* LOGOUT */
+
+        document
+            .getElementById("logoutButton")
+            .addEventListener("click", async function () {
+
+                const button = this;
+
+                button.textContent = "Logging out...";
+
+                button.disabled = true;
+
+
+                const { error } =
+                    await client.auth.signOut();
+
+
+                if (error) {
+
+                    alert(
+                        "Unable to logout. Please try again."
+                    );
+
+                    button.textContent = "Logout";
+
+                    button.disabled = false;
+
+                    return;
+                }
+
+
+                window.location.href = "login.html";
+
+            });
+
+
+        /* START DASHBOARD */
+/* START DASHBOARD */
+
+/* ================================
+   SERVICE REQUEST SYSTEM
+================================ */
+
+document.querySelectorAll(".service-button").forEach(button => {
+
+    button.addEventListener("click", async function () {
+
+        const serviceBox = this.closest(".quick-service");
+        const serviceName = serviceBox.querySelector("strong").textContent.trim();
+
+        const fullName = prompt("Enter your full name:");
+        if (!fullName) return;
+
+        const phone = prompt("Enter your phone number:");
+        if (!phone) return;
+
+        const jambNumber = prompt(
+            "Enter your JAMB Registration Number (if applicable):"
+        );
+
+        const details = prompt(
+            "Tell us briefly what you need assistance with:"
+        );
+
+        const {
+            data: { session },
+            error: sessionError
+        } = await client.auth.getSession();
+
+        if (sessionError || !session) {
+            alert("Your session has expired. Please login again.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        button.textContent = "Submitting...";
+        button.disabled = true;
+
+        const { error } = await client
+            .from("service_requests")
+            .insert([
+                {
+                    user_id: session.user.id,
+                    service_name: serviceName,
+                    full_name: fullName,
+                    phone: phone,
+                    jamb_number: jambNumber || null,
+                    details: details || null
+                }
+            ]);
+
+        button.textContent = "Request";
+        button.disabled = false;
+
+        if (error) {
+            console.error(error);
+            alert("Unable to submit your request. Please try again.");
+            return;
+        }
+
+        alert(
+            "Request submitted successfully! 🎉\n\n" +
+            "MichaelVenture has received your request."
+        );
+    });
+
+});
+
+        loadDashboard();
+
+    </script>
 
 </body>
-
 </html>

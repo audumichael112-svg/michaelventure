@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Our Services - MichaelVenture</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .services-page {
+            min-height: 100vh;
+        }
+
+        .services-header {
+            background: white;
+            text-align: center;
+            padding: 35px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo-circle {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #075b3d;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .services-header h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #075b3d;
+        }
+
+        .services-header p {
+            font-size: 16px;
+            color: #667085;
+            line-height: 1.6;
+        }
+
+        .services-container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .services-container > h2 {
+            text-align: center;
+            font-size: 28px;
+            color: #075b3d;
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            text-align: center;
+            color: #667085;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .category {
+            margin-bottom: 35px;
+        }
+
+        .category-title {
+            font-size: 21px;
+            color: #172033;
+            margin-bottom: 15px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #edf0f4;
+        }
+
+        .service-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .service-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #172033;
+        }
+
+        .service-card p {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .request-btn {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            background: #075b3d;
+            color: white;
+            padding: 11px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .request-btn:hover {
+            background: #064b32;
+        }
+
+        .back-btn {
+            display: block;
+            max-width: 300px;
+            margin: 10px auto 35px;
+            text-align: center;
+            text-decoration: none;
+            color: #075b3d;
+            border: 1px solid #075b3d;
+            padding: 12px;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 15px;
+            color: #667085;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+
+            .services-header h1 {
+                font-size: 26px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-container > h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="services-page">
+
+    <header class="services-header">
+
+        <div class="logo-circle">
+            MV
+        </div>
+
+        <h1>MichaelVenture</h1>
+
+        <p>
+            Digital Services, Academic Support & Business Solutions
+        </p>
+
+    </header>
+
+
+    <main class="services-container">
+
+        <h2>Our Services</h2>
+
+        <p class="intro">
+            Choose the service you need and submit your request.
+            Our team will review it and contact you with the next steps.
+        </p>
+
+
+        <!-- JAMB & ADMISSION -->
+
+        <section class="category">
+
+            <h3 class="category-title">
+                🎓 JAMB & Admission
+            </h3>
+
+            <div class="services-grid">
+
+                <div class="service-card">
+
+                    <div class="service-icon">📄</div>
+
+                    <h3>JAMB Admission Letter</h3>
+
+                    <p>
+                        Assistance with obtaining and printing your
+                        JAMB admission letter.
+                    </p>
+
+                    <a
+                        href="request.html?service=JAMB%20Admission%20Letter"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <div class="service-icon">📑</div>
+
+                    <h3>Original JAMB Result</h3>
+
+                    <p>
+                        Assistance with obtaining and processing
+                        your original JAMB result.
+                    </p>
+
+                    <a
+                        href="request.html?service=Original%20JAMB%20Result"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <div class="service-icon">📚</div>
+
+                    <h3>O'Level Upload</h3>
+
+                    <p>
+                        Assistance with uploading and verifying
+                        your WAEC, NECO or NABTEB result.
+                    </p>
+
+                    <a
+                        href="request.html?service=O%27Level%20Upload"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACADEMIC -->
+
+        <section class="category">
+
+            <h3 class="category-title">
+                📚 Academic Services
+            </h3>
+
+            <div class="services-grid">
+
+                <div class="service-card">
+
+                    <div class="service-icon">✍️</div>
+
+                    <h3>Assignment Assistance</h3>
+
+                    <p>
+                        Get assistance with assignments,
+                        academic writing and formatting.
+                    </p>
+
+                    <a
+                        href="request.html?service=Assignment%20Assistance"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <div class="service-icon">📖</div>
+
+                    <h3>Research & Project Assistance</h3>
+
+                    <p>
+                        Assistance with research proposals,
+                        projects, formatting and academic work.
+                    </p>
+
+                    <a
+                        href="request.html?service=Research%20%26%20Project%20Assistance"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <div class="service-icon">🤖</div>
+
+                    <h3>AI Study Assistant</h3>
+
+                    <p>
+                        Get help understanding academic topics,
+                        assignments and research questions.
+                    </p>
+
+                    <a
+                        href="request.html?service=AI%20Study%20Assistant"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DIGITAL & BUSINESS -->
+
+        <section class="category">
+
+            <h3 class="category-title">
+                💻 Digital & Business
+            </h3>
+
+            <div class="services-grid">
+
+                <div class="service-card">
+
+                    <div class="service-icon">🌐</div>
+
+                    <h3>Website Development</h3>
+
+                    <p>
+                        Professional websites for businesses,
+                        organizations and personal brands.
+                    </p>
+
+                    <a
+                        href="request.html?service=Website%20Development"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <div class="service-icon">🏢</div>
+
+                    <h3>Business Registration</h3>
+
+                    <p>
+                        Assistance with business registration
+                        and related documentation.
+                    </p>
+
+                    <a
+                        href="request.html?service=Business%20Registration"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <div class="service-icon">📋</div>
+
+                    <h3>Document Processing</h3>
+
+                    <p>
+                        Assistance with document preparation,
+                        processing and digital services.
+                    </p>
+
+                    <a
+                        href="request.html?service=Document%20Processing"
+                        class="request-btn"
+                    >
+                        Request Service
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <a
+            href="dashboard.html"
+            class="

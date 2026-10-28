@@ -1,786 +1,878 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563EB">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<title>MichaelVenture AI | Study Assistant</title>
 
-<title>MichaelVenture AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f7fb;
-    color: #172033;
+:root {
+    --blue: #2563EB;
+    --blue-dark: #1D4ED8;
+    --blue-light: #EFF6FF;
+    --background: #F3F5F8;
+    --white: #FFFFFF;
+    --text: #1F2937;
+    --muted: #6B7280;
+    --border: #E1E5EB;
 }
 
+html {
+    min-height: 100%;
+    background: var(--background);
+}
+
+body {
+    position: relative;
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* MICHAELVENTURE WATERMARK LOGO */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("./logo.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: min(80vw, 480px);
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
+}
+
+header,
+main,
+footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* HEADER */
 header {
-    background: #075c3f;
-    color: white;
-    padding: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
+    padding: 15px 18px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 11px;
+    min-width: 0;
 }
 
 .logo {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    object-fit: contain;
+    padding: 3px;
     background: white;
-    color: #075c3f;
+    border: 1px solid var(--border);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
 }
 
 .brand h1 {
-    font-size: 18px;
     margin: 0;
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.4;
 }
 
 .brand p {
+    margin: 3px 0 0;
+    color: var(--muted);
     font-size: 11px;
-    margin: 4px 0 0;
 }
 
 .dashboard {
-    color: white;
-    text-decoration: none;
-    border: 1px solid white;
+    flex-shrink: 0;
     padding: 9px 12px;
+    border: 1px solid #BFDBFE;
     border-radius: 10px;
+    color: var(--blue-dark);
+    background: var(--blue-light);
     font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
 }
 
+/* MAIN CONTENT */
 main {
+    width: 100%;
     max-width: 850px;
     margin: auto;
-    padding: 12px;
+    padding: 22px 14px 30px;
 }
 
 .card {
-    background: white;
-    border-radius: 16px;
-    padding: 18px;
-    margin-bottom: 12px;
-    box-shadow: 0 3px 15px rgba(0,0,0,.06);
+    margin-bottom: 17px;
+    padding: 23px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid var(--border);
+    border-radius: 19px;
+    box-shadow: 0 6px 22px rgba(31, 41, 55, 0.045);
 }
 
 .card h2 {
-    color: #075c3f;
-    margin-top: 0;
-    line-height: 1.3;
+    margin: 0 0 15px;
+    color: var(--text);
+    font-size: 25px;
+    line-height: 1.4;
+}
+
+.card h3 {
+    margin: 0 0 15px;
+    color: var(--blue-dark);
+    font-size: 20px;
 }
 
 p {
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
-textarea {
-    width: 100%;
-    height: 110px;
-    border: 2px solid #075c3f;
-    border-radius: 12px;
-    padding: 13px;
+.intro p {
+    color: #4B5563;
     font-size: 16px;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 7px 12px;
+    border: 1px solid #BFDBFE;
+    border-radius: 25px;
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* QUESTION BOX */
+textarea {
+    display: block;
+    width: 100%;
+    min-height: 135px;
+    padding: 15px;
+    border: 2px solid #CBD5E1;
+    border-radius: 14px;
+    background: #FFFFFF;
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
     resize: vertical;
-    font-family: Arial;
     outline: none;
 }
 
+textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+textarea::placeholder {
+    color: #9CA3AF;
+}
+
+/* BUTTONS */
 .buttons {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 11px;
+    margin-top: 13px;
 }
 
 button {
-    border: 0;
-    border-radius: 10px;
-    padding: 13px;
-    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: inherit;
     font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 #send {
     flex: 1;
-    background: #075c3f;
+    background: var(--blue);
     color: white;
+}
+
+#send:hover {
+    background: var(--blue-dark);
 }
 
 #newChat {
-    background: #e8efec;
-    color: #075c3f;
+    background: #EFF2F6;
+    color: #374151;
+    border: 1px solid var(--border);
 }
 
+#newChat:hover {
+    background: #E5E7EB;
+}
+
+/* CONVERSATION */
 #chat {
-    max-height: 450px;
+    max-height: 500px;
     overflow-y: auto;
+    overflow-wrap: anywhere;
+    scroll-behavior: smooth;
+}
+
+.welcome {
+    padding: 25px 12px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.welcome-icon {
+    margin-bottom: 8px;
+    font-size: 38px;
 }
 
 .user {
-    background: #075c3f;
+    margin: 14px 0 14px 10%;
+    padding: 15px;
+    border-radius: 15px 15px 4px 15px;
+    background: var(--blue);
     color: white;
-    padding: 13px;
-    border-radius: 14px;
-    margin: 10px 0 10px 10%;
-    line-height: 1.6;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
 }
 
 .ai {
-    background: #eef8f4;
-    border-left: 5px solid #075c3f;
-    padding: 13px;
-    border-radius: 14px;
-    margin: 10px 0;
-    line-height: 1.7;
+    margin: 14px 0;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--blue);
+    border-radius: 15px;
+    background: #F8FAFC;
+    color: var(--text);
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.ai-heading {
+    color: var(--blue-dark);
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.answer-content {
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .copy {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 9px 12px;
+    border: 1px solid #BFDBFE;
+    border-radius: 9px;
     background: white;
-    color: #075c3f;
-    border: 1px solid #075c3f;
-    padding: 7px 10px;
-    margin-top: 8px;
+    color: var(--blue-dark);
+    font-size: 13px;
 }
 
+.copy:hover {
+    background: var(--blue-light);
+}
+
+/* LOADING AND ERRORS */
 #thinking {
     display: none;
-    color: #075c3f;
-    background: #eef8f4;
-    padding: 10px;
-    border-radius: 10px;
+    margin-top: 13px;
+    padding: 13px;
+    border: 1px solid #DBEAFE;
+    border-radius: 12px;
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    font-size: 14px;
 }
 
 #error {
     display: none;
-    color: #a00000;
-    background: #fff0f0;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 9px;
+    margin-top: 13px;
+    padding: 13px;
+    border: 1px solid #FECACA;
+    border-radius: 12px;
+    background: #FEF2F2;
+    color: #991B1B;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+/* TOPIC SUGGESTIONS */
+.tips {
+    padding-left: 22px;
 }
 
 .tips li {
-    margin: 8px 0;
+    margin: 10px 0;
+    color: #4B5563;
 }
 
+.tips li::marker {
+    color: var(--blue);
+}
+
+/* FOOTER */
 footer {
+    padding: 25px 15px;
+    color: var(--muted);
     text-align: center;
-    color: #777;
-    padding: 20px;
     font-size: 12px;
 }
 
-@media(max-width:600px) {
+footer strong {
+    color: var(--blue-dark);
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    header {
+        padding: 13px 11px;
+        gap: 8px;
+    }
+
+    .brand {
+        gap: 8px;
+    }
+
+    .logo {
+        width: 43px;
+        height: 43px;
+    }
 
     .brand h1 {
-        font-size: 16px;
+        font-size: 15px;
+    }
+
+    .brand p {
+        font-size: 10px;
     }
 
     .dashboard {
+        padding: 8px 9px;
         font-size: 12px;
+    }
+
+    main {
+        padding: 17px 12px 25px;
+    }
+
+    .card {
+        padding: 19px 16px;
+        border-radius: 16px;
+    }
+
+    .card h2 {
+        font-size: 23px;
+    }
+
+    .card h3 {
+        font-size: 19px;
     }
 
     .buttons {
         flex-direction: column;
     }
 
+    .buttons button {
+        width: 100%;
+        min-height: 48px;
+    }
+
     .user {
         margin-left: 3%;
     }
 
+    .ai {
+        padding: 14px 12px;
+    }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <header>
 
-<div class="brand">
+    <div class="brand">
 
-<div class="logo">
-MV
-</div>
+        <img src="logo.png" alt="MichaelVenture Logo" class="logo">
 
-<div>
+        <div>
+            <h1>MichaelVenture AI</h1>
+            <p>Your Personal Study Companion</p>
+        </div>
 
-<h1>MichaelVenture AI</h1>
+    </div>
 
-<p>Your Personal Study Companion</p>
-
-</div>
-
-</div>
-
-
-<a
-href="dashboard.html"
-class="dashboard"
->
-Dashboard
-</a>
+    <a href="dashboard.html" class="dashboard">
+        Dashboard
+    </a>
 
 </header>
 
-
-
 <main>
 
+    <section class="card intro">
 
-<div class="card">
+        <h2>🤖 MichaelVenture AI Study Assistant</h2>
 
-<h2>
-🤖 MichaelVenture AI Study Assistant
-</h2>
+        <p>
+            Ask questions about your courses, departments,
+            assignments, research, projects, examinations,
+            calculations, and other academic topics.
+        </p>
 
-<p>
-Ask me anything about your course, department,
-assignments, research, projects, examinations,
-calculations or any other academic topic.
-</p>
+        <p>
+            You can ask follow-up questions to continue your conversation.
+        </p>
 
-<p>
-You can also ask follow-up questions.
-</p>
+        <span class="badge">📚 Your Academic Companion</span>
 
-</div>
+    </section>
 
+    <section class="card">
 
+        <h3>📝 Ask MichaelVenture AI</h3>
 
-<div class="card">
+        <textarea
+            id="question"
+            placeholder="Type your academic question here..."
+            aria-label="Your academic question"
+        ></textarea>
 
-<h3 style="color:#075c3f;">
-📝 Ask MichaelVenture AI
-</h3>
+        <div class="buttons">
 
-<textarea
-id="question"
-placeholder="Type your academic question here..."
-></textarea>
+            <button type="button" id="send">
+                🚀 Send Question
+            </button>
 
+            <button type="button" id="newChat">
+                🔄 New Chat
+            </button>
 
-<div class="buttons">
+        </div>
 
-<button id="send">
-🚀 Send Question
-</button>
+        <div id="error" role="alert"></div>
 
-<button id="newChat">
-🔄 New Chat
-</button>
+    </section>
 
-</div>
+    <section class="card">
 
+        <h3>💬 Conversation</h3>
 
-<div id="error"></div>
+        <div id="chat" aria-live="polite">
 
-</div>
+            <div id="welcome" class="welcome">
 
+                <div class="welcome-icon">👋</div>
 
+                Welcome to <strong>MichaelVenture AI</strong>!
 
-<div class="card">
+                <br><br>
 
-<h3 style="color:#075c3f;">
-💬 Conversation
-</h3>
+                Your conversation will appear here.
 
-<div id="chat">
+            </div>
 
-<div id="welcome"
-style="text-align:center;color:#777;padding:15px;">
+        </div>
 
-👋 Welcome to
-<strong>MichaelVenture AI</strong>!
+        <div id="thinking">
+            🤖 MichaelVenture AI is thinking...
+        </div>
 
-<br><br>
+    </section>
 
-Your AI answers will appear here.
+    <section class="card">
 
-</div>
+        <h3>💡 What You Can Ask About</h3>
 
-</div>
+        <ul class="tips">
+            <li>Courses and subjects across departments</li>
+            <li>Assignments and homework explanations</li>
+            <li>Research proposals and academic projects</li>
+            <li>Exam preparation and revision questions</li>
+            <li>Accounting and business calculations</li>
+            <li>Step-by-step problem solving</li>
+            <li>Understanding difficult academic concepts</li>
+        </ul>
 
-<div id="thinking">
-🤖 MichaelVenture AI is thinking...
-</div>
-
-</div>
-
-
-
-<div class="card tips">
-
-<h3 style="color:#075c3f;">
-💡 You can ask about
-</h3>
-
-<ul>
-
-<li>All Departments</li>
-
-<li>All Courses & Subjects</li>
-
-<li>Assignments & Homework</li>
-
-<li>Research & Projects</li>
-
-<li>Exam Preparation</li>
-
-<li>Academic Questions</li>
-
-<li>Calculations & Problem Solving</li>
-
-</ul>
-
-</div>
-
+    </section>
 
 </main>
 
-
-
 <footer>
-
-© 2026 MichaelVenture. All Rights Reserved.
-
+    <p>
+        © <span id="year"></span>
+        <strong>MichaelVenture</strong>. All Rights Reserved.
+    </p>
+    <p>Professional Digital Services &amp; Business Support.</p>
 </footer>
 
-
-
-<!-- SCRIPTS ARE LOADED HERE, NOT IN THE HEAD -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="supabase.js"></script>
-
-
 <script>
-
-let client;
-
-let history = [];
-
-
-const question =
-document.getElementById("question");
-
-const send =
-document.getElementById("send");
-
-const newChat =
-document.getElementById("newChat");
-
-const chat =
-document.getElementById("chat");
-
-const thinking =
-document.getElementById("thinking");
-
-const error =
-document.getElementById("error");
-
-
-
-/* START SUPABASE */
-
-try {
-
-client =
-window.supabase.createClient(
-window.SUPABASE_URL,
-window.SUPABASE_KEY
-);
-
-} catch (e) {
-
-error.textContent =
-"Supabase could not load. Please check supabase.js.";
-
-error.style.display =
-"block";
-
-}
-
-
-
-/* ESCAPE */
-
-function escapeHTML(text) {
-
-return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-
-/* FORMAT */
-
-function formatAnswer(text) {
-
-let result =
-escapeHTML(text);
-
-
-/* BOLD */
-
-result =
-result.replace(
-/\*\*(.*?)\*\*/g,
-"<strong>$1</strong>"
-);
-
-
-/* HEADINGS */
-
-result =
-result.replace(
-/^### (.*?)$/gm,
-"<strong style='color:#075c3f;font-size:17px;'>$1</strong>"
-);
-
-
-/* LINE BREAKS */
-
-result =
-result.replace(
-/\n/g,
-"<br>"
-);
-
-return result;
-
-}
-
-
-
-/* USER MESSAGE */
-
-function addUser(text) {
-
-const welcome =
-document.getElementById("welcome");
-
-if (welcome) {
-welcome.remove();
-}
-
-
-const div =
-document.createElement("div");
-
-div.className =
-"user";
-
-div.innerHTML =
-"<strong>You</strong><br>" +
-escapeHTML(text);
-
-chat.appendChild(div);
-
-chat.scrollTop =
-chat.scrollHeight;
-
-}
-
-
-
-/* AI MESSAGE */
-
-function addAI(text) {
-
-const div =
-document.createElement("div");
-
-div.className =
-"ai";
-
-div.dataset.answer =
-text;
-
-div.innerHTML =
-
-"<strong>🤖 MichaelVenture AI</strong>" +
-
-"<div style='margin-top:7px;'>" +
-formatAnswer(text) +
-"</div>" +
-
-"<button class='copy' onclick='copyAnswer(this)'>" +
-"📋 Copy Answer" +
-"</button>";
-
-chat.appendChild(div);
-
-chat.scrollTop =
-chat.scrollHeight;
-
-}
-
-
-
-/* COPY */
-
-async function copyAnswer(button) {
-
-const box =
-button.parentElement;
-
-const text =
-box.dataset.answer;
-
-try {
-
-await navigator.clipboard.writeText(text);
-
-button.textContent =
-"✅ Copied!";
-
-setTimeout(function(){
-
-button.textContent =
-"📋 Copy Answer";
-
-},1500);
-
-} catch(e) {
-
-button.textContent =
-"Copy failed";
-
-}
-
-}
-
-
-
-/* SEND */
-
-async function askAI() {
-
-const text =
-question.value.trim();
-
-
-error.style.display =
-"none";
-
-
-if (!text) {
-
-error.textContent =
-"Please type a question first.";
-
-error.style.display =
-"block";
-
-return;
-
-}
-
-
-if (!client) {
-
-error.textContent =
-"Supabase is not available.";
-
-error.style.display =
-"block";
-
-return;
-
-}
-
-
-send.disabled = true;
-      newChat.disabled = true;
-
-    send.innerText = "⏳ AI is thinking...";
-    thinking.style.display = "block";
-
-    addUserMessage(text);
-
-    history.push({
-        role: "user",
-        content: text
-    });
-
-    question.value = "";
-
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.getElementById("year").textContent =
+        new Date().getFullYear();
+
+    const questionInput = document.getElementById("question");
+    const sendButton = document.getElementById("send");
+    const newChatButton = document.getElementById("newChat");
+    const chat = document.getElementById("chat");
+    const thinking = document.getElementById("thinking");
+    const errorBox = document.getElementById("error");
+
+    let client = null;
+    let history = [];
+    let isSending = false;
+
+    /*
+     * CONNECT TO SUPABASE
+     */
     try {
+        if (
+            window.supabase &&
+            window.SUPABASE_URL &&
+            window.SUPABASE_KEY
+        ) {
+            client = window.supabase.createClient(
+                window.SUPABASE_URL,
+                window.SUPABASE_KEY
+            );
+        }
+    } catch (e) {
+        console.error("Supabase initialization error:", e);
+    }
 
-        console.log("Sending question to dynamic-action...");
+    /*
+     * ESCAPE HTML
+     */
+    function escapeHTML(text) {
+        return String(text ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
-        const result = await client.functions.invoke(
-            "dynamic-action",
-            {
-                body: {
-                    question: text,
-                    history: history
-                }
-            }
+    /*
+     * FORMAT ANSWER
+     */
+    function formatAnswer(text) {
+        let result = escapeHTML(text);
+
+        result = result.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
         );
 
-        console.log("FUNCTION RESULT:", result);
+        result = result.replace(
+            /^### (.*?)$/gm,
+            "<strong class='answer-heading'>$1</strong>"
+        );
 
-        if (result.error) {
-            throw new Error(
-                result.error.message ||
-                "The Edge Function returned an error."
-            );
+        result = result.replace(/\n/g, "<br>");
+
+        return result;
+    }
+
+    /*
+     * SHOW ERROR
+     */
+    function showError(text) {
+        errorBox.textContent = text;
+        errorBox.style.display = "block";
+    }
+
+    /*
+     * ADD USER MESSAGE
+     */
+    function addUserMessage(text) {
+        const welcome = document.getElementById("welcome");
+
+        if (welcome) {
+            welcome.remove();
         }
 
-        if (!result.data) {
-            throw new Error(
-                "No response was received from MichaelVenture AI."
-            );
+        const div = document.createElement("div");
+        div.className = "user";
+
+        const heading = document.createElement("strong");
+        heading.textContent = "You";
+
+        const content = document.createElement("div");
+        content.style.marginTop = "6px";
+        content.textContent = text;
+
+        div.appendChild(heading);
+        div.appendChild(content);
+
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    /*
+     * ADD AI ANSWER
+     */
+    function addAIMessage(text) {
+        const welcome = document.getElementById("welcome");
+
+        if (welcome) {
+            welcome.remove();
         }
 
-        if (result.data.error) {
-            throw new Error(result.data.error);
-        }
+        const div = document.createElement("div");
+        div.className = "ai";
+        div.dataset.answer = text;
 
-        const answer = result.data.answer;
+        const heading = document.createElement("div");
+        heading.className = "ai-heading";
+        heading.textContent = "🤖 MichaelVenture AI";
 
-        if (!answer || !String(answer).trim()) {
-            throw new Error(
-                "MichaelVenture AI returned an empty answer."
-            );
-        }
+        const content = document.createElement("div");
+        content.className = "answer-content";
+        content.innerHTML = formatAnswer(text);
 
-        addAIMessage(String(answer));
+        const copyButton = document.createElement("button");
+        copyButton.type = "button";
+        copyButton.className = "copy";
+        copyButton.textContent = "📋 Copy Answer";
 
-        history.push({
-            role: "assistant",
-            content: String(answer)
+        copyButton.addEventListener("click", async function () {
+            try {
+                await navigator.clipboard.writeText(text);
+                copyButton.textContent = "✅ Copied!";
+
+                setTimeout(function () {
+                    copyButton.textContent = "📋 Copy Answer";
+                }, 1500);
+            } catch (e) {
+                showError(
+                    "Could not copy automatically. Please select and copy the answer manually."
+                );
+            }
         });
 
-    } catch (error) {
+        div.appendChild(heading);
+        div.appendChild(content);
+        div.appendChild(copyButton);
 
-        console.error(
-            "MICHAELVENTURE AI ERROR:",
-            error
-        );
-
-        errorBox.innerText =
-            "❌ " +
-            (error.message || "Something went wrong.");
-
-        errorBox.style.display = "block";
-
-    } finally {
-
-        thinking.style.display = "none";
-
-        send.disabled = false;
-
-        newChat.disabled = false;
-
-        send.innerText = "🚀 Send Question";
-    }
-  }
-/* SEND BUTTON */
-
-send.onclick = function () {
-    askAI();
-};
-
-
-/* NEW CHAT */
-
-newChat.onclick = function () {
-
-    history = [];
-
-    chat.innerHTML =
-        "<div id='welcome' " +
-        "style='text-align:center;color:#777;padding:15px;'>" +
-        "👋 Welcome to <strong>MichaelVenture AI</strong>!" +
-        "<br><br>" +
-        "Your AI answers will appear here." +
-        "</div>";
-
-    question.value = "";
-
-    errorBox.style.display = "none";
-};
-
-
-/* ENTER KEY */
-
-question.onkeydown = function (event) {
-
-    if (
-        event.key === "Enter" &&
-        !event.shiftKey
-    ) {
-
-        event.preventDefault();
-
-        askAI();
-    }
-};
-
-
-/* LOGIN CHECK */
-
-async function checkLogin() {
-
-    if (!client) {
-        return;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
     }
 
-    try {
+    /*
+     * ASK AI
+     */
+    async function askAI() {
+        const text = questionInput.value.trim();
 
-        const result =
-            await client.auth.getSession();
+        errorBox.style.display = "none";
 
-        if (
-            !result.data ||
-            !result.data.session
-        ) {
-
-            window.location.href = "login.html";
+        if (isSending) {
+            return;
         }
 
-    } catch (error) {
+        if (!text) {
+            showError("Please type a question first.");
+            return;
+        }
 
-        console.error(
-            "Login check error:",
-            error
-        );
+        if (!client) {
+            showError(
+                "Supabase is unavailable. Please check supabase.js and your internet connection."
+            );
+            return;
+        }
+
+        isSending = true;
+        sendButton.disabled = true;
+        newChatButton.disabled = true;
+        sendButton.textContent = "⏳ AI is thinking...";
+        thinking.style.display = "block";
+
+        addUserMessage(text);
+
+        questionInput.value = "";
+
+        const previousHistory = history.slice();
+
+        history.push({
+            role: "user",
+            content: text
+        });
+
+        try {
+            const result = await client.functions.invoke(
+                "dynamic-action",
+                {
+                    body: {
+                        question: text,
+                        history: previousHistory.concat({
+                            role: "user",
+                            content: text
+                        })
+                    }
+                }
+            );
+
+            if (result.error) {
+                throw new Error(
+                    result.error.message ||
+                    "The AI service could not be reached."
+                );
+            }
+
+            if (!result.data) {
+                throw new Error(
+                    "No response was received from MichaelVenture AI."
+                );
+            }
+
+            if (result.data.error) {
+                throw new Error(result.data.error);
+            }
+
+            const answer = result.data.answer;
+
+            if (!answer || !String(answer).trim()) {
+                throw new Error(
+                    "MichaelVenture AI returned an empty answer."
+                );
+            }
+
+            const finalAnswer = String(answer);
+
+            addAIMessage(finalAnswer);
+
+            history.push({
+                role: "assistant",
+                content: finalAnswer
+            });
+
+        } catch (err) {
+            console.error("MichaelVenture AI error:", err);
+
+            /*
+             * Remove the unanswered user message from AI history.
+             */
+            history = previousHistory;
+
+            showError(
+                "Unable to get an AI answer: " +
+                (err.message || "Please try again.")
+            );
+
+        } finally {
+            isSending = false;
+            thinking.style.display = "none";
+            sendButton.disabled = false;
+            newChatButton.disabled = false;
+            sendButton.textContent = "🚀 Send Question";
+            questionInput.focus();
+        }
     }
-}
 
+    /*
+     * SEND BUTTON
+     */
+    sendButton.addEventListener("click", askAI);
 
-checkLogin();
+    /*
+     * START NEW CHAT
+     */
+    newChatButton.addEventListener("click", function () {
+        if (isSending) {
+            return;
+        }
 
+        history = [];
+        questionInput.value = "";
+        errorBox.style.display = "none";
+
+        chat.innerHTML = `
+            <div id="welcome" class="welcome">
+                <div class="welcome-icon">👋</div>
+                Welcome to <strong>MichaelVenture AI</strong>!
+                <br><br>
+                Your conversation will appear here.
+            </div>
+        `;
+
+        questionInput.focus();
+    });
+
+    /*
+     * ENTER TO SEND
+     * SHIFT + ENTER ADDS A NEW LINE
+     */
+    questionInput.addEventListener("keydown", function (event) {
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey &&
+            !event.isComposing
+        ) {
+            event.preventDefault();
+            askAI();
+        }
+    });
+
+    /*
+     * CHECK LOGIN
+     */
+    async function checkLogin() {
+        if (!client) {
+            return;
+        }
+
+        try {
+            const { data, error } = await client.auth.getSession();
+
+            if (error) {
+                throw error;
+            }
+
+            if (!data.session) {
+                window.location.href = "login.html";
+            }
+        } catch (err) {
+            console.error("Login check error:", err);
+        }
+    }
+
+    checkLogin();
+
+});
 </script>
 
 </body>

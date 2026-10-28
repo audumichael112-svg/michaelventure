@@ -1,284 +1,495 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
 
-    <title>My Requests - MichaelVenture</title>
+<title>My Requests | MichaelVenture</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #172033;
-        }
+:root {
+    --blue: #2563EB;
+    --blue-dark: #1D4ED8;
+    --navy: #1E293B;
+    --background: #F3F4F6;
+    --white: #FFFFFF;
+    --text: #374151;
+    --muted: #64748B;
+    --border: #E5E7EB;
+}
 
-        .header {
-            text-align: center;
-            padding: 55px 20px 35px;
-        }
+html {
+    min-height: 100%;
+    background: var(--background);
+}
 
-        .logo {
-            width: 92px;
-            height: 92px;
-            border-radius: 50%;
-            background: #075c3f;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 38px;
-            font-weight: bold;
-            margin: 0 auto 25px;
-        }
+body {
+    position: relative;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+    background: var(--background);
+    line-height: 1.6;
+}
 
-        h1 {
-            color: #075c3f;
-            font-size: 44px;
-            margin-bottom: 15px;
-        }
+/* MICHAELVENTURE WATERMARK */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("logo.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: min(80vw, 480px);
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
+}
 
-        .subtitle {
-            color: #6b7485;
-            font-size: 22px;
-            line-height: 1.5;
-        }
+.container,
+footer {
+    position: relative;
+    z-index: 1;
+}
 
-        .container {
-            width: 92%;
-            max-width: 700px;
-            margin: 10px auto 50px;
-        }
+.container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+    padding: 24px 16px 35px;
+}
 
-        .loading {
-            text-align: center;
-            color: #6b7485;
-            font-size: 20px;
-            padding: 50px 10px;
-        }
+/* HEADER */
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 32px 18px;
+    background: #FFFFFF;
+    color: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 6px 22px rgba(15, 23, 42, 0.05);
+}
 
-        .empty {
-            background: white;
-            border-radius: 25px;
-            padding: 40px 25px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-        }
+.logo {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 15px;
+    padding: 5px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+}
 
-        .empty h2 {
-            color: #075c3f;
-            margin-bottom: 12px;
-        }
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
-        .request-card {
-            background: white;
-            border-radius: 25px;
-            padding: 28px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
-        }
+h1 {
+    color: var(--navy);
+    font-size: 29px;
+    line-height: 1.4;
+}
 
-        .service-title {
-            font-size: 28px;
-            margin-bottom: 18px;
-            color: #172033;
-        }
+.subtitle {
+    max-width: 500px;
+    margin: 10px auto 0;
+    color: var(--muted);
+    font-size: 14px;
+}
 
-        .status {
-            display: inline-block;
-            padding: 10px 18px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 17px;
-            margin-bottom: 22px;
-        }
+.header-label {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 6px 12px;
+    background: #EFF6FF;
+    color: var(--blue-dark);
+    border: 1px solid #BFDBFE;
+    border-radius: 25px;
+    font-size: 11px;
+    font-weight: bold;
+}
 
-        .pending {
-            background: #fff1df;
-            color: #b86500;
-        }
+/* NAVIGATION */
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+}
 
-        .processing {
-            background: #e7f0ff;
-            color: #1464d2;
-        }
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 50px;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+}
 
-        .completed {
-            background: #e2f7ed;
-            color: #087346;
-        }
+.btn-blue {
+    background: var(--blue);
+    color: #FFFFFF;
+    border: 1px solid var(--blue);
+}
 
-        .cancelled {
-            background: #ffe7e7;
-            color: #c62828;
-        }
+.btn-blue:hover {
+    background: var(--blue-dark);
+}
 
-        .info {
-            font-size: 18px;
-            line-height: 1.7;
-            margin-bottom: 8px;
-        }
+.btn-light {
+    background: #FFFFFF;
+    color: var(--blue-dark);
+    border: 1px solid #BFDBFE;
+}
 
-        .info strong {
-            color: #172033;
-        }
+.btn-light:hover {
+    background: #EFF6FF;
+}
 
-        .details {
-            background: #f5f7fb;
-            border-radius: 18px;
-            padding: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
+/* REQUEST COUNT */
+.summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+}
 
-        .details-title {
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
+.summary h2 {
+    color: var(--navy);
+    font-size: 16px;
+}
 
-        .payment-box {
-            background: #eefaf6;
-            border-radius: 20px;
-            padding: 22px;
-            margin-top: 20px;
-        }
+.count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 5px 10px;
+    background: var(--blue);
+    color: #FFFFFF;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
 
-        .payment-title {
-            color: #075c3f;
-            font-size: 23px;
-            font-weight: bold;
-            margin-bottom: 18px;
-        }
+/* REQUEST CARDS */
+.request-card {
+    margin-bottom: 17px;
+    padding: 21px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--blue);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.04);
+    overflow-wrap: anywhere;
+}
 
-        .payment-row {
-            padding: 12px 0;
-            border-bottom: 1px solid #d7ebe4;
-            font-size: 18px;
-        }
+.request-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+}
 
-        .payment-row:last-child {
-            border-bottom: none;
-        }
+.service-name {
+    color: var(--navy);
+    font-size: 19px;
+    line-height: 1.5;
+}
 
-        .paid {
-            color: #087346;
-            font-weight: bold;
-        }
+.request-id {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+}
 
-        .unpaid {
-            color: #b86500;
-            font-weight: bold;
-        }
+/* STATUS COLORS */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: bold;
+}
 
-        .submitted {
-            color: #6b7485;
-            font-size: 16px;
-            margin-top: 20px;
-        }
+.pending {
+    color: #9A3412;
+    background: #FFF7ED;
+    border: 1px solid #FED7AA;
+}
 
-        .back {
-            display: block;
-            text-align: center;
-            color: #075c3f;
-            font-weight: bold;
-            font-size: 20px;
-            text-decoration: none;
-            margin: 35px 0 70px;
-        }
+.processing {
+    color: #1D4ED8;
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+}
 
-        footer {
-            text-align: center;
-            padding: 35px 15px;
-            color: #6b7485;
-            font-size: 17px;
-        }
+.completed {
+    color: #166534;
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+}
 
-        footer strong {
-            color: #075c3f;
-        }
+.cancelled {
+    color: #B91C1C;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+}
 
-        @media (max-width: 500px) {
-            h1 {
-                font-size: 38px;
-            }
+.unknown {
+    color: #475569;
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+}
 
-            .subtitle {
-                font-size: 19px;
-            }
+/* REQUEST DETAILS */
+.info {
+    color: #475569;
+    font-size: 14px;
+    line-height: 2;
+}
 
-            .request-card {
-                padding: 22px;
-            }
+.info strong,
+.details strong {
+    color: var(--navy);
+}
 
-            .service-title {
-                font-size: 25px;
-            }
+.details {
+    margin-top: 14px;
+    padding: 13px;
+    background: #F8FAFC;
+    border: 1px solid #DBEAFE;
+    border-radius: 10px;
+    color: #475569;
+    font-size: 14px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
 
-            .info {
-                font-size: 17px;
-            }
-        }
-    </style>
+.date {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* MESSAGES */
+.message {
+    padding: 32px 20px;
+    text-align: center;
+}
+
+.message-icon {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.message h3 {
+    color: var(--navy);
+    font-size: 19px;
+    margin-bottom: 8px;
+}
+
+.message p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.message .btn {
+    margin: 18px auto 0;
+    max-width: 300px;
+}
+
+.small-note {
+    margin-top: 15px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* FOOTER */
+footer {
+    padding: 22px 15px;
+    background: #E5E7EB;
+    border-top: 1px solid #D1D5DB;
+    color: #64748B;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+footer strong {
+    color: var(--navy);
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 16px 12px 28px;
+    }
+
+    .header {
+        padding: 27px 15px;
+    }
+
+    .logo {
+        width: 82px;
+        height: 82px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .actions {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .request-card {
+        padding: 17px 14px;
+    }
+
+    .request-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .service-name {
+        font-size: 18px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <div class="header">
+<div class="container">
 
-        <div class="logo">MV</div>
+    <header class="header">
+
+        <div class="logo">
+            <img src="logo.png" alt="MichaelVenture Logo">
+        </div>
 
         <h1>My Requests</h1>
 
         <p class="subtitle">
-            Track the services you have requested.
+            View your submitted service requests and track their progress.
         </p>
 
-    </div>
+        <span class="header-label">
+            MICHAELVENTURE CUSTOMER PORTAL
+        </span>
 
-    <div class="container">
+    </header>
 
-        <div id="requestsContainer">
-            <div class="loading">
-                Loading your requests...
-            </div>
-        </div>
+    <nav class="actions">
 
-        <a href="dashboard.html" class="back">
+        <a href="services.html" class="btn btn-blue">
+            ➕ Request Another Service
+        </a>
+
+        <a href="dashboard.html" class="btn btn-light">
             ← Back to Dashboard
         </a>
 
-    </div>
+    </nav>
 
-    <footer>
-        © 2026 <strong>MichaelVenture</strong>. All Rights Reserved.
-    </footer>
+    <section class="summary" aria-live="polite">
 
+        <h2>Your Service Requests</h2>
+
+        <span class="count" id="requestCount">—</span>
+
+    </section>
+
+    <main id="requestsContainer" aria-live="polite">
+
+        <article class="request-card message">
+            <div class="message-icon">⏳</div>
+            <h3>Loading Your Requests</h3>
+            <p>Please wait while we retrieve your requests.</p>
+        </article>
+
+    </main>
+
+    <p class="small-note">
+        Each request is tracked separately. Submitting another request
+        will not replace your previous requests.
+    </p>
+
+</div>
+
+<footer>
+    <p>
+        &copy; <span id="currentYear"></span>
+        <strong>MichaelVenture</strong>. All Rights Reserved.
+    </p>
+    <p>Professional Digital Services &amp; Business Support.</p>
+</footer>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const box = document.getElementById("requestsContainer");
+    const count = document.getElementById("requestCount");
+
+    document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+    if (
+        !window.supabase ||
+        !window.SUPABASE_URL ||
+        !window.SUPABASE_KEY
+    ) {
+        box.innerHTML = `
+            <article class="request-card message">
+                <div class="message-icon">⚠️</div>
+                <h3>Connection Unavailable</h3>
+                <p>We could not connect to your account service.</p>
+                <p>Check your connection and refresh the page.</p>
+            </article>`;
+        return;
+    }
 
     const client = window.supabase.createClient(
         window.SUPABASE_URL,
         window.SUPABASE_KEY
     );
 
-
     function escapeHTML(value) {
-
-        if (value === null || value === undefined) {
-            return "";
-        }
-
-        return String(value)
+        return String(value ?? "")
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
@@ -286,65 +497,136 @@
             .replace(/'/g, "&#039;");
     }
 
+    function getStatusInfo(status) {
 
-    function getStatusClass(status) {
+        const value = String(status || "Pending")
+            .trim()
+            .toLowerCase();
 
-        const value = String(status || "").toLowerCase();
-
-        if (value === "processing") return "processing";
-        if (value === "completed") return "completed";
-        if (value === "cancelled") return "cancelled";
-
-        return "pending";
-    }
-
-
-    function getPaymentClass(status) {
-
-        const value = String(status || "").toLowerCase();
-
-        if (value === "paid") {
-            return "paid";
+        if (["completed", "complete"].includes(value)) {
+            return {
+                label: "Completed",
+                className: "completed",
+                icon: "🟢"
+            };
         }
-
-        return "unpaid";
-    }
-
-
-    function formatAmount(amount) {
 
         if (
-            amount === null ||
-            amount === undefined ||
-            amount === ""
+            ["processing", "in progress", "in-progress"].includes(value)
         ) {
-            return "Not set";
+            return {
+                label: "In Progress",
+                className: "processing",
+                icon: "🔵"
+            };
         }
 
-        const number = Number(amount);
-
-        if (Number.isNaN(number)) {
-            return escapeHTML(amount);
+        if (
+            ["cancelled", "canceled", "rejected"].includes(value)
+        ) {
+            return {
+                label: value === "rejected" ? "Rejected" : "Cancelled",
+                className: "cancelled",
+                icon: "🔴"
+            };
         }
 
-        return "₦" + number.toLocaleString("en-NG");
+        if (
+            ["pending", "pending review", "awaiting review"].includes(value)
+        ) {
+            return {
+                label: "Pending",
+                className: "pending",
+                icon: "🟠"
+            };
+        }
+
+        return {
+            label: String(status || "Pending"),
+            className: "unknown",
+            icon: "⚪"
+        };
     }
 
+    function formatDate(value) {
 
-    function formatDate(date) {
+        if (!value) return "Not available";
 
-        if (!date) {
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
             return "Not available";
         }
 
-        return new Date(date).toLocaleString();
+        return date.toLocaleString();
     }
 
+    function renderRequest(request) {
+
+        const status = getStatusInfo(request.status);
+
+        const reference = request.jamb_number
+            ? `<div><strong>Reference:</strong>
+               ${escapeHTML(request.jamb_number)}</div>`
+            : "";
+
+        const details = request.details
+            ? `<div class="details">
+                   <strong>Additional Information</strong>
+                   <div style="margin-top:8px;">${escapeHTML(request.details)}</div>
+               </div>`
+            : "";
+
+        return `
+            <article class="request-card">
+
+                <div class="request-top">
+
+                    <div>
+                        <h3 class="service-name">
+                            ${escapeHTML(request.service_name || "Service Request")}
+                        </h3>
+
+                        <span class="request-id">
+                            Request ID: ${escapeHTML(request.id)}
+                        </span>
+                    </div>
+
+                    <span class="status ${status.className}">
+                        ${status.icon} ${escapeHTML(status.label)}
+                    </span>
+
+                </div>
+
+                <div class="info">
+                    <div><strong>Name:</strong>
+                        ${escapeHTML(request.full_name || "Not provided")}
+                    </div>
+
+                    <div><strong>Phone:</strong>
+                        ${escapeHTML(request.phone || "Not provided")}
+                    </div>
+
+                    ${reference}
+                </div>
+
+                ${details}
+
+                <div class="date">
+                    Submitted: ${escapeHTML(formatDate(request.created_at))}
+                </div>
+
+            </article>`;
+    }
 
     async function loadRequests() {
 
-        const container =
-            document.getElementById("requestsContainer");
+        box.innerHTML = `
+            <article class="request-card message">
+                <div class="message-icon">⏳</div>
+                <h3>Loading Your Requests</h3>
+                <p>Please wait a moment.</p>
+            </article>`;
 
         try {
 
@@ -353,216 +635,68 @@
                 error: sessionError
             } = await client.auth.getSession();
 
+            if (sessionError) throw sessionError;
 
-            if (sessionError || !session) {
-
+            if (!session) {
                 window.location.href = "login.html";
                 return;
             }
-
 
             const { data, error } = await client
                 .from("service_requests")
                 .select("*")
                 .eq("user_id", session.user.id)
-                .order("created_at", {
-                    ascending: false
-                });
+                .order("created_at", { ascending: false });
 
+            if (error) throw error;
 
-            if (error) {
+            const requests = data || [];
 
-                console.error(error);
+            count.textContent = String(requests.length);
 
-                container.innerHTML = `
-                    <div class="empty">
-                        <h2>Unable to load requests</h2>
-                        <p>Please refresh the page and try again.</p>
-                    </div>
-                `;
+            if (requests.length === 0) {
 
-                return;
-            }
-
-
-            if (!data || data.length === 0) {
-
-                container.innerHTML = `
-                    <div class="empty">
-                        <h2>No Requests Yet</h2>
-                        <p>
-                            You have not submitted any service request yet.
-                        </p>
-                    </div>
-                `;
+                box.innerHTML = `
+                    <article class="request-card message">
+                        <div class="message-icon">📋</div>
+                        <h3>No Requests Yet</h3>
+                        <p>You have not submitted any service requests.</p>
+                        <p>Your new requests will appear here.</p>
+                        <a href="services.html" class="btn btn-blue">
+                            ➕ Browse Our Services
+                        </a>
+                    </article>`;
 
                 return;
             }
 
-
-            container.innerHTML = data.map(request => {
-
-                const status =
-                    request.status || "Pending";
-
-                const paymentStatus =
-                    request.payment_status || "Unpaid";
-
-
-                return `
-
-                    <div class="request-card">
-
-                        <div class="service-title">
-                            ${escapeHTML(request.service_name)}
-                        </div>
-
-
-                        <div class="status ${getStatusClass(status)}">
-                            🔵 ${escapeHTML(status)}
-                        </div>
-
-
-                        <div class="info">
-                            <strong>Name:</strong>
-                            ${escapeHTML(request.full_name)}
-                        </div>
-
-
-                        <div class="info">
-                            <strong>Phone:</strong>
-                            ${escapeHTML(request.phone)}
-                        </div>
-
-
-                        ${
-                            request.jamb_number
-                            ?
-                            `
-                            <div class="info">
-                                <strong>
-                                    JAMB Reg. / Matric / Business Email:
-                                </strong><br>
-                                ${escapeHTML(request.jamb_number)}
-                            </div>
-                            `
-                            :
-                            ""
-                        }
-
-
-                        ${
-                            request.details
-                            ?
-                            `
-                            <div class="details">
-
-                                <div class="details-title">
-                                    Additional Information:
-                                </div>
-
-                                <div>
-                                    ${escapeHTML(request.details)}
-                                </div>
-
-                            </div>
-                            `
-                            :
-                            ""
-                        }
-
-
-                        <div class="payment-box">
-
-                            <div class="payment-title">
-                                💳 Payment Information
-                            </div>
-
-
-                            <div class="payment-row">
-
-                                <strong>
-                                    Service Amount
-                                </strong>
-
-                                <br>
-
-                                ${formatAmount(request.service_amount)}
-
-                            </div>
-
-
-                            <div class="payment-row">
-
-                                <strong>
-                                    Payment Status
-                                </strong>
-
-                                <br>
-
-                                <span class="${getPaymentClass(paymentStatus)}">
-                                    ${escapeHTML(paymentStatus)}
-                                </span>
-
-                            </div>
-
-
-                            <div class="payment-row">
-
-                                <strong>
-                                    Payment Reference
-                                </strong>
-
-                                <br>
-
-                                ${
-                                    request.payment_reference
-                                    ?
-                                    escapeHTML(request.payment_reference)
-                                    :
-                                    "Not available"
-                                }
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="submitted">
-
-                            Submitted:
-                            ${formatDate(request.created_at)}
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }).join("");
-
+            box.innerHTML = requests.map(renderRequest).join("");
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Request loading error:", error);
 
-            container.innerHTML = `
-                <div class="empty">
+            count.textContent = "—";
 
-                    <h2>Something went wrong</h2>
+            box.innerHTML = `
+                <article class="request-card message">
+                    <div class="message-icon">⚠️</div>
+                    <h3>Unable to Load Your Requests</h3>
+                    <p>We could not retrieve your requests.</p>
+                    <button type="button" id="retryButton"
+                        class="btn btn-blue">
+                        ↻ Try Again
+                    </button>
+                </article>`;
 
-                    <p>
-                        Please refresh the page and try again.
-                    </p>
-
-                </div>
-            `;
+            document.getElementById("retryButton")
+                .addEventListener("click", loadRequests);
         }
     }
 
-
     loadRequests();
 
+});
 </script>
 
 </body>

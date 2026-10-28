@@ -1,683 +1,1529 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0F172A">
 
-    <title>Admin Dashboard - MichaelVenture</title>
+<title>Admin Dashboard | MichaelVenture</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #172033;
-        }
+:root {
+    --navy: #0F172A;
+    --blue: #2563EB;
+    --blue-hover: #1D4ED8;
+    --light-blue: #EFF6FF;
+    --background: #F8FAFC;
+    --white: #FFFFFF;
+    --text: #172554;
+    --muted: #64748B;
+    --border: #DBE4F0;
+    --green: #15803D;
+    --red: #B91C1C;
+    --shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
 
-        .header {
-            background: #075c3f;
-            color: white;
-            text-align: center;
-            padding: 28px 20px;
-        }
+html {
+    min-height: 100%;
+    background: var(--background);
+}
 
-        .logo {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: white;
-            color: #075c3f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            font-weight: bold;
-            margin: 0 auto 15px;
-        }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
 
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
+button, input, select {
+    font: inherit;
+}
 
-        .header p {
-            font-size: 16px;
-            opacity: .9;
-        }
+button {
+    cursor: pointer;
+    touch-action: manipulation;
+}
 
-        .container {
-            width: 92%;
-            max-width: 900px;
-            margin: 25px auto 60px;
-        }
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            margin-bottom: 35px;
-        }
+/* HEADER */
 
-        .stat-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,.07);
-        }
+.header {
+    padding: 28px 18px;
+    text-align: center;
+    color: var(--white);
+    background: linear-gradient(135deg, #0F172A, #1D4ED8);
+    box-shadow: var(--shadow);
+}
 
-        .stat-card span {
-            display: block;
-            color: #687386;
-            font-size: 17px;
-            margin-bottom: 12px;
-        }
+.logo {
+    width: 72px;
+    height: 72px;
+    padding: 5px;
+    margin: 0 auto 13px;
+    border-radius: 16px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
 
-        .stat-card strong {
-            font-size: 40px;
-        }
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
-        .section-title {
-            font-size: 30px;
-            margin-bottom: 20px;
-        }
+.header h1 {
+    margin: 0 0 7px;
+    font-size: 27px;
+    overflow-wrap: anywhere;
+}
 
-        .message {
-            background: white;
-            padding: 30px;
-            border-radius: 18px;
-            text-align: center;
-            color: #687386;
-            margin-bottom: 25px;
-        }
+.header p {
+    margin: 0;
+    color: #DBEAFE;
+    font-size: 14px;
+}
 
-        .request-card {
-            background: white;
-            border-radius: 22px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 30px rgba(0,0,0,.08);
-        }
+/* MAIN */
 
-        .request-card h2 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
+.container {
+    width: 100%;
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 25px 16px 45px;
+}
 
-        .status {
-            display: inline-block;
-            padding: 9px 16px;
-            border-radius: 30px;
-            background: #eaf2ff;
-            color: #1769d2;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+/* TOOLBAR */
 
-        .info {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+}
 
-        .info strong {
-            color: #172033;
-        }
+.toolbar button {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 15px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--navy);
+    font-weight: 700;
+}
 
-        .details {
-            background: #f5f7fb;
-            border-radius: 15px;
-            padding: 18px;
-            margin: 20px 0;
-            line-height: 1.6;
-        }
+.toolbar .refresh-btn {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+}
 
-        .manage {
-            border-top: 1px solid #e2e5ea;
-            margin-top: 22px;
-            padding-top: 22px;
-        }
+.toolbar .refresh-btn:hover {
+    background: var(--blue-hover);
+}
 
-        .manage h3 {
-            margin-bottom: 15px;
-            font-size: 22px;
-        }
+/* STATISTICS */
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin: 15px 0 7px;
-        }
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
 
-        input,
-        select {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ccd2da;
-            border-radius: 12px;
-            font-size: 16px;
-            background: white;
-        }
+.stat-card {
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    min-width: 0;
+}
 
-        .update-btn {
-            width: 100%;
-            margin-top: 20px;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            background: #075c3f;
-            color: white;
-            font-size: 17px;
-            font-weight: bold;
-        }
+.stat-label {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
 
-        .update-btn:disabled {
-            opacity: .6;
-        }
+.stat-card strong {
+    display: block;
+    color: var(--navy);
+    font-size: 30px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
 
-        .logout {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            background: #172033;
-            color: white;
-            font-size: 17px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
+.stat-card small {
+    display: block;
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 12px;
+}
 
-        .footer {
-            text-align: center;
-            color: #687386;
-            padding: 30px 15px;
-        }
+/* SECTIONS */
 
-        @media (max-width: 650px) {
-            .stats {
-                grid-template-columns: 1fr;
-            }
+.section-title {
+    margin: 0 0 18px;
+    color: var(--navy);
+    font-size: 24px;
+}
 
-            .header h1 {
-                font-size: 24px;
-            }
+.panel {
+    padding: 22px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+}
 
-            .section-title {
-                font-size: 26px;
-            }
-        }
-    </style>
+/* SEARCH AND FILTERS */
+
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+input, select {
+    width: 100%;
+    min-height: 45px;
+    padding: 11px 12px;
+    border: 1px solid #CBD5E1;
+    border-radius: 9px;
+    background: var(--white);
+    color: var(--text);
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+label {
+    display: block;
+    margin: 14px 0 7px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* REQUEST CARDS */
+
+.request-card {
+    padding: 22px;
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    overflow-wrap: anywhere;
+}
+
+.request-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.request-top h3 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 20px;
+}
+
+.request-id {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 30px;
+    background: var(--light-blue);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge.pending {
+    background: #FFF7ED;
+    color: #C2410C;
+}
+
+.badge.processing {
+    background: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.badge.approved {
+    background: #F0FDF4;
+    color: #15803D;
+}
+
+.badge.completed, .badge.paid {
+    background: #DCFCE7;
+    color: #166534;
+}
+
+.badge.cancelled, .badge.unpaid {
+    background: #FEF2F2;
+    color: #B91C1C;
+}
+
+.badge.payment-pending {
+    background: #FFF7ED;
+    color: #C2410C;
+}
+
+.info {
+    margin: 8px 0;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.info strong {
+    color: var(--navy);
+}
+
+.details {
+    margin: 17px 0;
+    padding: 15px;
+    border: 1px solid #DBEAFE;
+    border-radius: 11px;
+    background: var(--light-blue);
+    color: #334155;
+    font-size: 14px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+/* MANAGEMENT */
+
+.manage {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.manage h4 {
+    margin: 0 0 12px;
+    color: var(--navy);
+    font-size: 17px;
+}
+
+.manage-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px 14px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 11px 14px;
+    border: none;
+    border-radius: 9px;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: var(--blue-hover);
+}
+
+.btn-secondary {
+    background: #E2E8F0;
+    color: var(--navy);
+}
+
+.btn-green {
+    background: var(--green);
+    color: var(--white);
+}
+
+.update-btn {
+    width: 100%;
+    margin-top: 17px;
+    padding: 13px;
+    border: none;
+    border-radius: 9px;
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 700;
+}
+
+.card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.card-actions .btn {
+    flex: 1;
+    min-width: 130px;
+}
+
+/* MESSAGES */
+
+.message {
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: var(--white);
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.message.error {
+    background: #FEF2F2;
+    border-color: #FECACA;
+    color: var(--red);
+}
+
+.message.success {
+    background: #EFF6FF;
+    border-color: #BFDBFE;
+    color: var(--blue);
+}
+
+.message.info {
+    background: #EFF6FF;
+    border-color: #BFDBFE;
+    color: var(--blue);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* FOOTER */
+
+.footer {
+    padding: 25px 15px;
+    background: var(--navy);
+    color: #CBD5E1;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.footer strong {
+    color: var(--white);
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+    .container {
+        padding: 18px 12px 35px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 17px;
+    }
+
+    .stat-card strong {
+        font-size: 26px;
+    }
+
+    .panel, .request-card {
+        padding: 17px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .request-top {
+        flex-direction: column;
+    }
+
+    .manage-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header h1 {
+        font-size: 23px;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 380px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .toolbar {
+        flex-direction: column;
+    }
+
+    .toolbar button {
+        width: 100%;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <header class="header">
-        <div class="logo">MV</div>
+<header class="header">
+    <div class="logo">
+        <img src="logo.png" alt="MichaelVenture Logo">
+    </div>
 
-        <h1>MichaelVenture Admin</h1>
+    <h1>MichaelVenture Admin</h1>
+    <p>Administrator Dashboard · Customer Requests &amp; Payments</p>
+</header>
 
-        <p>Manage customer requests and payments</p>
-    </header>
+<div class="container">
 
-    <main class="container">
+    <div class="toolbar">
+        <button type="button" class="refresh-btn" id="refreshButton">
+            ↻ Refresh Requests
+        </button>
 
-        <section class="stats">
+        <button type="button" id="exportButton">
+            Export Requests CSV
+        </button>
 
-            <div class="stat-card">
-                <span>Total Requests</span>
-                <strong id="totalRequests">0</strong>
-            </div>
+        <button type="button" id="logoutButton">
+            Logout
+        </button>
+    </div>
 
-            <div class="stat-card">
-                <span>Pending</span>
-                <strong id="pendingRequests">0</strong>
-            </div>
+    <section class="stats">
+        <div class="stat-card">
+            <span class="stat-label">Total Requests</span>
+            <strong id="totalRequests">0</strong>
+            <small>All customer requests</small>
+        </div>
 
-            <div class="stat-card">
-                <span>Completed</span>
-                <strong id="completedRequests">0</strong>
-            </div>
+        <div class="stat-card">
+            <span class="stat-label">Pending Review</span>
+            <strong id="pendingRequests">0</strong>
+            <small>Awaiting a decision</small>
+        </div>
 
-        </section>
+        <div class="stat-card">
+            <span class="stat-label">Processing</span>
+            <strong id="processingRequests">0</strong>
+            <small>Currently in progress</small>
+        </div>
 
+        <div class="stat-card">
+            <span class="stat-label">Approved</span>
+            <strong id="approvedRequests">0</strong>
+            <small>Approved requests</small>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Completed</span>
+            <strong id="completedRequests">0</strong>
+            <small>Completed services</small>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Paid Requests</span>
+            <strong id="paidRequests">0</strong>
+            <small>Payments manually confirmed</small>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Recorded Revenue</span>
+            <strong id="recordedRevenue">₦0.00</strong>
+            <small>Sum of requests marked Paid</small>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Unpaid Requests</span>
+            <strong id="unpaidRequests">0</strong>
+            <small>Not yet marked Paid</small>
+        </div>
+    </section>
+
+    <section>
         <h2 class="section-title">Customer Requests</h2>
 
-        <div id="message" class="message">
-            Loading requests...
+        <div class="panel">
+            <div class="filters">
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search customer, phone, email or service..."
+                    aria-label="Search requests"
+                >
+
+                <select id="statusFilter" aria-label="Filter service status">
+                    <option value="all">All Service Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="filters">
+                <select id="paymentFilter" aria-label="Filter payment status">
+                    <option value="all">All Payment Statuses</option>
+                    <option value="Unpaid">Unpaid</option>
+                    <option value="Pending">Payment Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Refunded">Refunded</option>
+                </select>
+
+                <select id="sortFilter" aria-label="Sort requests">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="highest">Highest Amount First</option>
+                    <option value="lowest">Lowest Amount First</option>
+                </select>
+            </div>
+
+            <div id="message" class="message" role="status" aria-live="polite">
+                Checking administrator access…
+            </div>
         </div>
 
         <div id="requestsContainer"></div>
-
-        <button class="logout" onclick="logout()">
-            Logout
-        </button>
-
-    </main>
-
-    <footer class="footer">
-        © 2026 <strong>MichaelVenture</strong>. All Rights Reserved.
-    </footer>
-
-
+    </section>
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
 
-const client = window.supabase.createClient(
-    window.SUPABASE_URL,
-    window.SUPABASE_KEY
-);
+    const $ = id => document.getElementById(id);
 
+    $("currentYear") && ($("currentYear").textContent =
+        new Date().getFullYear());
 
-/* =========================
-   CHECK ADMIN
-========================= */
+    const message = $("message");
+    const container = $("requestsContainer");
 
-async function checkAdmin() {
+    let client = null;
+    let requests = [];
+    let isAdmin = false;
 
-    const {
-        data: { session },
-        error
-    } = await client.auth.getSession();
-
-    if (error || !session) {
-        window.location.href = "admin-login.html";
-        return false;
+    function showMessage(text, type = "") {
+        message.textContent = text;
+        message.className = "message" + (type ? " " + type : "");
+        message.classList.remove("hidden");
     }
 
-    const { data, error: adminError } = await client
-        .from("admin_users")
-        .select("user_id")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
-
-    if (adminError) {
-
-        console.error("Admin check error:", adminError);
-
-        alert("Unable to verify administrator access.");
-
-        window.location.href = "admin-login.html";
-
-        return false;
+    function hideMessage() {
+        message.classList.add("hidden");
     }
 
-    if (!data) {
-
-        alert("You do not have administrator access.");
-
-        await client.auth.signOut();
-
-        window.location.href = "admin-login.html";
-
-        return false;
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
-    return true;
-}
+    function normalize(value) {
+        return String(value ?? "").trim().toLowerCase();
+    }
 
+    function formatMoney(value) {
+        const number = Number(value || 0);
 
-/* =========================
-   LOAD REQUESTS
-========================= */
+        return "₦" + number.toLocaleString("en-NG", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
 
-async function loadRequests() {
+    function updateStatistics() {
+        const countStatus = status =>
+            requests.filter(request =>
+                normalize(request.status || "Pending") ===
+                normalize(status)
+            ).length;
 
-    const message = document.getElementById("message");
-    const container = document.getElementById("requestsContainer");
+        const paid = requests.filter(request =>
+            normalize(request.payment_status || "Unpaid") === "paid"
+        );
 
-    message.style.display = "block";
-    message.textContent = "Loading requests...";
+        const unpaid = requests.filter(request =>
+            normalize(request.payment_status || "Unpaid") === "unpaid"
+        );
 
-    const {
-        data: requests,
-        error
-    } = await client
-        .from("service_requests")
-        .select("*")
-        .order("created_at", {
-            ascending: false
+        const revenue = paid.reduce((sum, request) => {
+            const amount = Number(request.service_amount || 0);
+
+            return sum + (
+                Number.isFinite(amount) ? amount : 0
+            );
+        }, 0);
+
+        $("totalRequests").textContent = requests.length;
+        $("pendingRequests").textContent = countStatus("Pending");
+        $("processingRequests").textContent = countStatus("Processing");
+        $("approvedRequests").textContent = countStatus("Approved");
+        $("completedRequests").textContent = countStatus("Completed");
+        $("paidRequests").textContent = paid.length;
+        $("unpaidRequests").textContent = unpaid.length;
+        $("recordedRevenue").textContent = formatMoney(revenue);
+    }
+
+    /* CHECK ADMINISTRATOR ACCESS */
+
+    async function checkAdmin() {
+        if (
+            !window.supabase ||
+            !window.SUPABASE_URL ||
+            !window.SUPABASE_KEY
+        ) {
+            showMessage(
+                "Supabase configuration is missing. Check supabase.js.",
+                "error"
+            );
+            return false;
+        }
+
+        try {
+            client = window.supabase.createClient(
+                window.SUPABASE_URL,
+                window.SUPABASE_KEY
+            );
+
+            showMessage("Checking your login session...");
+
+            const {
+                data: sessionData,
+                error: sessionError
+            } = await client.auth.getSession();
+
+            if (sessionError) throw sessionError;
+
+            if (!sessionData.session) {
+                showMessage(
+                    "No active login session was found. Please sign in " +
+                    "using your existing administrator login page.",
+                    "error"
+                );
+                return false;
+            }
+
+            const user = sessionData.session.user;
+
+            showMessage("Checking administrator permissions...");
+
+            const {
+                data: admin,
+                error: adminError
+            } = await client
+                .from("admin_users")
+                .select("user_id")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+            if (adminError) throw adminError;
+
+            if (!admin) {
+                showMessage(
+                    "This account is not registered as an administrator.",
+                    "error"
+                );
+                return false;
+            }
+
+            isAdmin = true;
+            return true;
+
+        } catch (error) {
+            console.error("Administrator verification error:", error);
+
+            showMessage(
+                "Administrator verification failed: " +
+                (error.message || "Unknown error"),
+                "error"
+            );
+
+            return false;
+        }
+    }
+
+    /* LOAD CUSTOMER REQUESTS */
+
+    async function loadRequests() {
+        if (!isAdmin || !client) {
+            showMessage(
+                "Administrator access has not been verified.",
+                "error"
+            );
+            return;
+        }
+
+        const refreshButton = $("refreshButton");
+
+        refreshButton.disabled = true;
+        showMessage("Loading customer requests...");
+
+        try {
+            const {
+                data,
+                error
+            } = await client
+                .from("service_requests")
+                .select("*")
+                .order("created_at", { ascending: false });
+
+            if (error) throw error;
+
+            requests = data || [];
+
+            updateStatistics();
+            renderRequests();
+
+            if (requests.length === 0) {
+                showMessage(
+                    "No customer requests were returned by Supabase. " +
+                    "Check the service_requests table and its access policies.",
+                    "info"
+                );
+            } else {
+                showMessage(
+                    requests.length + " customer request(s) loaded.",
+                    "success"
+                );
+            }
+
+        } catch (error) {
+            console.error("Loading requests failed:", error);
+
+            showMessage(
+                "Unable to load customer requests: " +
+                (error.message || "Unknown error"),
+                "error"
+            );
+
+        } finally {
+            refreshButton.disabled = false;
+        }
+    }
+
+    /* SEARCH, FILTER AND SORT */
+
+    function getFilteredRequests() {
+        const search = normalize($("searchInput").value);
+        const statusFilter = $("statusFilter").value;
+        const paymentFilter = $("paymentFilter").value;
+        const sortFilter = $("sortFilter").value;
+
+        const filtered = requests.filter(request => {
+            const searchable = [
+                request.id,
+                request.service_name,
+                request.full_name,
+                request.phone,
+                request.jamb_number,
+                request.details,
+                request.payment_reference,
+                request.email,
+                request.business_email
+            ].map(normalize).join(" ");
+
+            const matchesSearch =
+                !search || searchable.includes(search);
+
+            const serviceStatus = request.status || "Pending";
+            const paymentStatus = request.payment_status || "Unpaid";
+
+            const matchesStatus =
+                statusFilter === "all" ||
+                normalize(serviceStatus) === normalize(statusFilter);
+
+            const matchesPayment =
+                paymentFilter === "all" ||
+                normalize(paymentStatus) === normalize(paymentFilter);
+
+            return matchesSearch && matchesStatus && matchesPayment;
         });
 
-    console.log("REQUEST DATA:", requests);
-    console.log("REQUEST ERROR:", error);
+        filtered.sort((a, b) => {
+            if (sortFilter === "oldest") {
+                return new Date(a.created_at || 0) -
+                    new Date(b.created_at || 0);
+            }
 
-    if (error) {
+            if (sortFilter === "highest") {
+                return Number(b.service_amount || 0) -
+                    Number(a.service_amount || 0);
+            }
 
-        console.error(error);
+            if (sortFilter === "lowest") {
+                return Number(a.service_amount || 0) -
+                    Number(b.service_amount || 0);
+            }
 
-        message.textContent =
-            "Unable to load requests: " + error.message;
+            return new Date(b.created_at || 0) -
+                new Date(a.created_at || 0);
+        });
 
-        return;
+        return filtered;
     }
 
-    document.getElementById("totalRequests").textContent =
-        requests.length;
+    /* RENDER REQUESTS */
 
-    const pending = requests.filter(
-        r => String(r.status || "").toLowerCase() === "pending"
-    ).length;
+    function renderRequests() {
+        const filtered = getFilteredRequests();
 
-    const completed = requests.filter(
-        r => String(r.status || "").toLowerCase() === "completed"
-    ).length;
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="message">
+                    <strong>No customer requests found.</strong>
+                    <p>Try changing your search or filter settings.</p>
+                </div>
+            `;
+            return;
+        }
 
-    document.getElementById("pendingRequests").textContent =
-        pending;
+        container.innerHTML = filtered.map(request => {
+            const id = escapeHTML(request.id);
+            const name = escapeHTML(
+                request.full_name || "Not provided"
+            );
+            const service = escapeHTML(
+                request.service_name || "Not specified"
+            );
+            const phone = escapeHTML(request.phone || "Not provided");
+            const jamb = escapeHTML(
+                request.jamb_number || "Not provided"
+            );
+            const details = escapeHTML(
+                request.details || "No additional details"
+            );
+            const status = request.status || "Pending";
+            const paymentStatus = request.payment_status || "Unpaid";
+            const amount = request.service_amount ?? "";
+            const reference = escapeHTML(
+                request.payment_reference || ""
+            );
+            const createdAt = request.created_at
+                ? new Date(request.created_at).toLocaleString()
+                : "Date unavailable";
 
-    document.getElementById("completedRequests").textContent =
-        completed;
+            const statusOptions = [
+                "Pending",
+                "Approved",
+                "Processing",
+                "Completed",
+                "Cancelled"
+            ];
 
+            const paymentOptions = [
+                "Unpaid",
+                "Pending",
+                "Paid",
+                "Refunded"
+            ];
 
-    if (!requests.length) {
+            const statusClass = [
+                "pending", "approved", "processing",
+                "completed", "cancelled"
+            ].includes(normalize(status))
+                ? normalize(status)
+                : "pending";
 
-        message.textContent = "No customer requests yet.";
+            const paymentClass =
+                normalize(paymentStatus) === "paid"
+                    ? "paid"
+                    : normalize(paymentStatus) === "pending"
+                    ? "payment-pending"
+                    : normalize(paymentStatus) === "refunded"
+                    ? "cancelled"
+                    : "unpaid";
 
-        container.innerHTML = "";
+            return `
+                <article class="request-card">
+                    <div class="request-top">
+                        <div>
+                            <h3>${name}</h3>
+                            <div class="request-id">
+                                Request ID: ${id}
+                            </div>
+                        </div>
 
-        return;
+                        <span class="badge ${statusClass}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </div>
+
+                    <p class="info">
+                        <strong>Service:</strong> ${service}
+                    </p>
+
+                    <p class="info">
+                        <strong>Phone:</strong> ${phone}
+                    </p>
+
+                    <p class="info">
+                        <strong>JAMB Number:</strong> ${jamb}
+                    </p>
+
+                    <p class="info">
+                        <strong>Created:</strong> ${escapeHTML(createdAt)}
+                    </p>
+
+                    <div class="details">
+                        <strong>Request details:</strong><br>
+                        ${details}
+                    </div>
+
+                    <div class="manage">
+                        <h4>Manage Request</h4>
+
+                        <div class="manage-grid">
+                            <div>
+                                <label for="status-${id}">
+                                    Request Status
+                                </label>
+
+                                <select id="status-${id}">
+                                    ${statusOptions.map(option => `
+                                        <option value="${option}"
+                                            ${status === option ? "selected" : ""}>
+                                            ${option}
+                                        </option>
+                                    `).join("")}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="amount-${id}">
+                                    Service Amount (₦)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="amount-${id}"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="Enter amount"
+                                    value="${escapeHTML(String(amount))}"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="payment-${id}">
+                                    Payment Status
+                                </label>
+
+                                <select id="payment-${id}">
+                                    ${paymentOptions.map(option => `
+                                        <option value="${option}"
+                                            ${paymentStatus === option ? "selected" : ""}>
+                                            ${option}
+                                        </option>
+                                    `).join("")}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="reference-${id}">
+                                    Payment Reference
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="reference-${id}"
+                                    placeholder="Optional reference"
+                                    value="${reference}"
+                                >
+                            </div>
+                        </div>
+
+                        <p class="info">
+                            <strong>Current payment:</strong>
+                            <span class="badge ${paymentClass}">
+                                ${escapeHTML(paymentStatus)}
+                            </span>
+                        </p>
+
+                        <p class="info">
+                            <strong>Amount:</strong>
+                            ${formatMoney(amount)}
+                        </p>
+
+                        <div class="card-actions">
+                            <button
+                                type="button"
+                                class="btn"
+                                data-action="save"
+                                data-id="${id}">
+                                Save Changes
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-action="whatsapp"
+                                data-id="${id}">
+                                WhatsApp Customer
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-action="copy"
+                                data-id="${id}">
+                                Copy Summary
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }).join("");
+    }
+    /* SAVE REQUEST CHANGES */
+
+    async function saveRequest(requestId) {
+        const request = requests.find(
+            item => String(item.id) === String(requestId)
+        );
+
+        if (!request) {
+            showMessage("Request not found.", "error");
+            return;
+        }
+
+        const statusElement = $("status-" + requestId);
+        const amountElement = $("amount-" + requestId);
+        const paymentElement = $("payment-" + requestId);
+        const referenceElement = $("reference-" + requestId);
+
+        if (
+            !statusElement ||
+            !amountElement ||
+            !paymentElement ||
+            !referenceElement
+        ) {
+            showMessage("Could not read request details.", "error");
+            return;
+        }
+
+        const newStatus = statusElement.value;
+        const amountText = amountElement.value.trim();
+        const newPaymentStatus = paymentElement.value;
+        const newReference = referenceElement.value.trim();
+
+        let newAmount = null;
+
+        if (amountText !== "") {
+            newAmount = Number(amountText);
+
+            if (!Number.isFinite(newAmount) || newAmount < 0) {
+                showMessage(
+                    "Enter a valid service amount.",
+                    "error"
+                );
+                return;
+            }
+        }
+
+        if (
+            newPaymentStatus === "Paid" &&
+            normalize(request.payment_status || "Unpaid") !== "paid"
+        ) {
+            const confirmed = confirm(
+                "Have you confirmed that the customer has paid? " +
+                "Only mark this request as Paid after verifying receipt."
+            );
+
+            if (!confirmed) {
+                paymentElement.value =
+                    request.payment_status || "Unpaid";
+                return;
+            }
+        }
+
+        showMessage("Saving request changes...");
+
+        try {
+            const updates = {
+                status: newStatus,
+                service_amount: newAmount,
+                payment_status: newPaymentStatus,
+                payment_reference: newReference || null
+            };
+
+            const { data, error } = await client
+                .from("service_requests")
+                .update(updates)
+                .eq("id", request.id)
+                .select();
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                throw new Error(
+                    "No row was updated. Check your administrator " +
+                    "permissions and Supabase security policies."
+                );
+            }
+
+            Object.assign(request, updates);
+
+            updateStatistics();
+            renderRequests();
+
+            showMessage(
+                "Request updated successfully.",
+                "success"
+            );
+
+        } catch (error) {
+            console.error("Save request error:", error);
+
+            showMessage(
+                "Could not save changes: " +
+                (error.message || "Unknown error") +
+                ". Check your database columns and permissions.",
+                "error"
+            );
+        }
     }
 
 
-    message.style.display = "none";
+    /* CONTACT CUSTOMER ON WHATSAPP */
 
-    container.innerHTML = "";
+    function contactCustomer(requestId) {
+        const request = requests.find(
+            item => String(item.id) === String(requestId)
+        );
+
+        if (!request) {
+            showMessage("Customer request not found.", "error");
+            return;
+        }
+
+        let phone = String(request.phone || "").replace(/\D/g, "");
+
+        if (phone.startsWith("0")) {
+            phone = "234" + phone.substring(1);
+        }
+
+        if (!phone.startsWith("234") || phone.length !== 13) {
+            showMessage(
+                "This customer does not have a valid Nigerian phone number.",
+                "error"
+            );
+            return;
+        }
+
+        const customerName = request.full_name || "Customer";
+        const serviceName = request.service_name || "requested service";
+
+        const text =
+            "Hello " + customerName +
+            ", this is MichaelVenture regarding your " +
+            serviceName + " request. Your current request status is " +
+            (request.status || "Pending") + ".";
+
+        const url =
+            "https://wa.me/" + phone +
+            "?text=" + encodeURIComponent(text);
+
+        window.open(url, "_blank");
+    }
 
 
-    requests.forEach(request => {
+    /* COPY REQUEST SUMMARY */
 
-        const card = document.createElement("div");
+    async function copyRequestSummary(requestId) {
+        const request = requests.find(
+            item => String(item.id) === String(requestId)
+        );
 
-        card.className = "request-card";
+        if (!request) {
+            showMessage("Customer request not found.", "error");
+            return;
+        }
 
-
-        const status =
-            request.status || "Pending";
-
-        const amount =
-            request.service_amount ?? "";
-
-        const paymentStatus =
-            request.payment_status || "Unpaid";
-
-        const paymentReference =
-            request.payment_reference || "";
-
-
-        card.innerHTML = `
-
-            <h2>
-                ${escapeHTML(request.service_name || "Service Request")}
-            </h2>
-
-            <div class="status">
-                ${escapeHTML(status)}
-            </div>
-
-            <div class="info">
-                <strong>Customer:</strong>
-                ${escapeHTML(request.full_name || "")}
-            </div>
-
-            <div class="info">
-                <strong>Phone:</strong>
-                ${escapeHTML(request.phone || "")}
-            </div>
-
-            <div class="info">
-                <strong>JAMB / Matric / Business Email:</strong>
-                ${escapeHTML(request.jamb_number || "")}
-            </div>
-
-            <div class="info">
-                <strong>Submitted:</strong>
-                ${request.created_at
+        const summary = [
+            "MICHAELVENTURE — SERVICE REQUEST",
+            "Request ID: " + request.id,
+            "Customer: " + (request.full_name || "Not provided"),
+            "Phone: " + (request.phone || "Not provided"),
+            "Service: " + (request.service_name || "Not specified"),
+            "JAMB Number: " + (request.jamb_number || "Not provided"),
+            "Details: " + (request.details || "None"),
+            "Request Status: " + (request.status || "Pending"),
+            "Service Amount: " +
+                (request.service_amount == null
+                    ? "Not set"
+                    : formatMoney(request.service_amount)),
+            "Payment Status: " +
+                (request.payment_status || "Unpaid"),
+            "Payment Reference: " +
+                (request.payment_reference || "Not provided"),
+            "Created At: " +
+                (request.created_at
                     ? new Date(request.created_at).toLocaleString()
-                    : ""
+                    : "Unavailable")
+        ].join("\n");
+
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(summary);
+            } else {
+                const textarea = document.createElement("textarea");
+                textarea.value = summary;
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+
+                document.body.appendChild(textarea);
+                textarea.select();
+
+                const copied = document.execCommand("copy");
+                textarea.remove();
+
+                if (!copied) {
+                    throw new Error("Copy operation was unsuccessful.");
                 }
-            </div>
+            }
 
-            <div class="details">
+            showMessage(
+                "Request summary copied successfully.",
+                "success"
+            );
 
-                <strong>Additional Information:</strong>
+        } catch (error) {
+            console.error("Copy error:", error);
 
-                <p style="margin-top:10px;">
-                    ${escapeHTML(request.details || "No additional information")}
-                </p>
-
-            </div>
-
-
-            <div class="manage">
-
-                <h3>Manage Request</h3>
-
-
-                <label>
-                    Service Status
-                </label>
-
-                <select id="status-${request.id}">
-
-                    <option value="Pending"
-                        ${status === "Pending" ? "selected" : ""}>
-                        Pending
-                    </option>
-
-                    <option value="Processing"
-                        ${status === "Processing" ? "selected" : ""}>
-                        Processing
-                    </option>
-
-                    <option value="Completed"
-                        ${status === "Completed" ? "selected" : ""}>
-                        Completed
-                    </option>
-
-                    <option value="Cancelled"
-                        ${status === "Cancelled" ? "selected" : ""}>
-                        Cancelled
-                    </option>
-
-                </select>
+            showMessage(
+                "Unable to copy automatically. Please try again.",
+                "error"
+            );
+        }
+    }
 
 
-                <label>
-                    Service Amount (₦)
-                </label>
+    /* EXPORT REQUESTS TO CSV */
 
-                <input
-                    type="number"
-                    id="amount-${request.id}"
-                    value="${escapeHTML(String(amount))}"
-                    placeholder="Enter amount"
-                >
+    function exportRequestsCSV() {
+        if (!isAdmin) {
+            showMessage(
+                "Administrator access is required to export requests.",
+                "error"
+            );
+            return;
+        }
+
+        const filtered = getFilteredRequests();
+
+        if (!filtered.length) {
+            showMessage(
+                "There are no requests to export. Refresh the dashboard first.",
+                "error"
+            );
+            return;
+        }
+
+        const headers = [
+            "Request ID",
+            "Customer Name",
+            "Phone",
+            "JAMB Number",
+            "Service",
+            "Details",
+            "Request Status",
+            "Service Amount",
+            "Payment Status",
+            "Payment Reference",
+            "Created At"
+        ];
+
+        function csvCell(value) {
+            let textValue = String(value ?? "");
+
+            // Help prevent spreadsheet formula injection.
+            if (/^[\s]*[=+\-@]/.test(textValue)) {
+                textValue = "'" + textValue;
+            }
+
+            return '"' + textValue.replace(/"/g, '""') + '"';
+        }
+
+        const rows = filtered.map(request => [
+            request.id,
+            request.full_name,
+            request.phone,
+            request.jamb_number,
+            request.service_name,
+            request.details,
+            request.status,
+            request.service_amount,
+            request.payment_status,
+            request.payment_reference,
+            request.created_at
+        ]);
+
+        const csv = [
+            headers.map(csvCell).join(","),
+            ...rows.map(row => row.map(csvCell).join(","))
+        ].join("\r\n");
+
+        const blob = new Blob(
+            ["\uFEFF" + csv],
+            { type: "text/csv;charset=utf-8;" }
+        );
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "michaelventure-service-requests.csv";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+        showMessage("CSV file export started.", "success");
+    }
 
 
-                <label>
-                    Payment Status
-                </label>
+    /* LOG OUT */
 
-                <select id="payment-${request.id}">
+    async function logoutAdmin() {
+        if (!client) {
+            showMessage("Supabase is not connected.", "error");
+            return;
+        }
 
-                    <option value="Unpaid"
-                        ${paymentStatus === "Unpaid" ? "selected" : ""}>
-                        Unpaid
-                    </option>
+        const confirmed = confirm("Are you sure you want to log out?");
 
-                    <option value="Pending"
-                        ${paymentStatus === "Pending" ? "selected" : ""}>
-                        Payment Pending
-                    </option>
+        if (!confirmed) return;
 
-                    <option value="Paid"
-                        ${paymentStatus === "Paid" ? "selected" : ""}>
-                        Paid
-                    </option>
+        try {
+            const { error } = await client.auth.signOut();
 
-                    <option value="Refunded"
-                        ${paymentStatus === "Refunded" ? "selected" : ""}>
-                        Refunded
-                    </option>
+            if (error) throw error;
 
-                </select>
+            window.location.href = "index.html";
 
+        } catch (error) {
+            console.error("Logout error:", error);
 
-                <label>
-                    Payment Reference
-                </label>
-
-                <input
-                    type="text"
-                    id="reference-${request.id}"
-                    value="${escapeHTML(String(paymentReference))}"
-                    placeholder="Enter payment reference"
-                >
+            showMessage(
+                "Logout failed: " +
+                (error.message || "Unknown error"),
+                "error"
+            );
+        }
+    }
 
 
-                <button
-                    class="update-btn"
-                    onclick="updateRequest('${request.id}')">
+    /* CONNECT DASHBOARD BUTTONS */
 
-                    Update Request
-
-                </button>
-
-            </div>
-        `;
-
-
-        container.appendChild(card);
-
+    $("refreshButton").addEventListener("click", function () {
+        loadRequests();
     });
 
-}
+    $("exportButton").addEventListener("click", function () {
+        exportRequestsCSV();
+    });
+
+    $("logoutButton").addEventListener("click", function () {
+        logoutAdmin();
+    });
 
 
-/* =========================
-   UPDATE REQUEST
-========================= */
+    /* CONNECT SEARCH AND FILTERS */
 
-async function updateRequest(id) {
+    $("searchInput").addEventListener("input", renderRequests);
 
-    const status =
-        document.getElementById("status-" + id).value;
+    $("statusFilter").addEventListener("change", renderRequests);
 
-    const amount =
-        document.getElementById("amount-" + id).value;
+    $("paymentFilter").addEventListener("change", renderRequests);
 
-    const paymentStatus =
-        document.getElementById("payment-" + id).value;
-
-    const paymentReference =
-        document.getElementById("reference-" + id).value;
+    $("sortFilter").addEventListener("change", renderRequests);
 
 
-    const button =
-        document.querySelector(
-            `button[onclick="updateRequest('${id}')"]`
-        );
+    /* CONNECT CUSTOMER REQUEST BUTTONS */
+
+    container.addEventListener("click", function (event) {
+        const button = event.target.closest("button[data-action]");
+
+        if (!button) return;
+
+        const action = button.dataset.action;
+        const requestId = button.dataset.id;
+
+        if (action === "save") {
+            saveRequest(requestId);
+        } else if (action === "whatsapp") {
+            contactCustomer(requestId);
+        } else if (action === "copy") {
+            copyRequestSummary(requestId);
+        }
+    });
 
 
-    button.disabled = true;
+    /* CONNECT DASHBOARD STARTUP */
 
-    button.textContent = "Updating...";
+    (async function startAdminDashboard() {
+        const allowed = await checkAdmin();
 
-
-    const { error } = await client
-        .from("service_requests")
-        .update({
-
-            status: status,
-
-            service_amount:
-                amount === "" ? null : Number(amount),
-
-            payment_status:
-                paymentStatus,
-
-            payment_reference:
-                paymentReference || null
-
-        })
-        .eq("id", id);
-
-
-    if (error) {
-
-        console.error(error);
-
-        alert(
-            "Update failed:\n\n" +
-            error.message
-        );
-
-        button.disabled = false;
-
-        button.textContent = "Update Request";
-
-        return;
-    }
-
-
-    alert("Request updated successfully! ✅");
-
-    await loadRequests();
-
-}
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-async function logout() {
-
-    await client.auth.signOut();
-
-    window.location.href =
-        "admin-login.html";
-}
-
-
-/* =========================
-   HTML SECURITY
-========================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-/* =========================
-   START
-========================= */
-
-(async function () {
-
-    const allowed = await checkAdmin();
-
-    if (allowed) {
-
-        await loadRequests();
-
-    }
-
-})();
-
+        if (allowed) {
+            await loadRequests();
+        }
+      
+    })();
+});
 </script>
+<footer class="footer">
+    <p>&copy; <span id="currentYear"></span>
+        <strong>MichaelVenture</strong>. All Rights Reserved.
+    </p>
+    <p>Administrator Portal · Professional Digital Services &amp; Business Support.</p>
+</footer>
 
 </body>
 </html>

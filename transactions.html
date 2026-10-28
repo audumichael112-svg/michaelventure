@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563EB">
+
+<title>My Transactions | MichaelVenture</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #2563EB;
+    --blue-dark: #1D4ED8;
+    --blue-light: #EFF6FF;
+    --background: #F3F5F8;
+    --white: #FFFFFF;
+    --text: #1F2937;
+    --muted: #6B7280;
+    --border: #E1E5EB;
+}
+
+html {
+    min-height: 100%;
+    background: var(--background);
+}
+
+body {
+    position: relative;
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* MICHAELVENTURE WATERMARK LOGO */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("./logo.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: min(80vw, 480px);
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
+}
+
+header,
+.container,
+footer {
+    position: relative;
+    z-index: 1;
+}
+
+header {
+    background: #FFFFFF;
+    color: var(--text);
+    text-align: center;
+    padding: 32px 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    padding: 5px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+header h1 {
+    margin: 5px 0;
+    font-size: 29px;
+    line-height: 1.35;
+}
+
+header p {
+    margin: 8px auto 0;
+    max-width: 450px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.header-label {
+    display: inline-block;
+    margin-top: 17px;
+    padding: 7px 13px;
+    color: var(--blue-dark);
+    background: var(--blue-light);
+    border: 1px solid #BFDBFE;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    margin: 25px auto;
+    padding: 0 15px 30px;
+}
+
+.back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 20px;
+    color: var(--blue-dark);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid var(--border);
+    border-radius: 19px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 22px rgba(31, 41, 55, 0.045);
+}
+
+.card h2 {
+    margin: 0 0 20px;
+    color: var(--text);
+    font-size: 24px;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.summary-box {
+    padding: 20px;
+    background: var(--blue-light);
+    border: 1px solid #DBEAFE;
+    border-radius: 15px;
+}
+
+.summary-box p {
+    margin: 0 0 8px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.summary-box strong {
+    display: block;
+    color: var(--blue-dark);
+    font-size: 24px;
+    overflow-wrap: anywhere;
+}
+
+.transaction {
+    padding: 20px;
+    margin: 16px 0;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--blue);
+    border-radius: 15px;
+    overflow-wrap: anywhere;
+}
+
+.transaction h3 {
+    margin: 0 0 15px;
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.transaction p {
+    margin: 12px 0;
+    color: #4B5563;
+    font-size: 15px;
+}
+
+.transaction p strong {
+    color: var(--text);
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 25px;
+    background: #FEF3C7;
+    color: #92400E;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.paid {
+    background: #DCFCE7;
+    color: #166534;
+}
+
+.refunded {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.failed {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+.processing {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.unpaid {
+    background: #F3F4F6;
+    color: #4B5563;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 16px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 12px;
+    background: var(--blue);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: var(--blue-dark);
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.secondary-button {
+    background: #FFFFFF;
+    color: var(--blue-dark);
+    border: 1px solid #BFDBFE;
+}
+
+.secondary-button:hover {
+    background: var(--blue-light);
+}
+
+.loading,
+.empty,
+.error {
+    padding: 28px 12px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.empty h3,
+.error h3 {
+    color: var(--text);
+}
+
+.error {
+    color: #B42318;
+}
+
+footer {
+    padding: 25px 15px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 13px;
+}
+
+footer strong {
+    color: var(--blue-dark);
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 28px 15px;
+    }
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    .container {
+        margin-top: 20px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .card {
+        padding: 19px 16px;
+        border-radius: 16px;
+    }
+
+    .card h2 {
+        font-size: 22px;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-box {
+        padding: 17px;
+    }
+
+    .transaction {
+        padding: 17px 14px;
+    }
+
+    .transaction h3 {
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="logo.png" class="logo" alt="MichaelVenture Logo">
+
+    <h1>💳 My Transactions</h1>
+
+    <p>View your service payment history and track your transactions.</p>
+
+    <span class="header-label">
+        MICHAELVENTURE CUSTOMER PORTAL
+    </span>
+</header>
+
+<main class="container">
+
+    <a href="dashboard.html" class="back">
+        ← Back to Dashboard
+    </a>
+
+    <section class="card">
+        <h2>Payment Summary</h2>
+
+        <div class="summary">
+
+            <div class="summary-box">
+                <p>Total Requests</p>
+                <strong id="totalRequests">0</strong>
+            </div>
+
+            <div class="summary-box">
+                <p>Confirmed Payments</p>
+                <strong id="paidTotal">₦0</strong>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="card">
+
+        <h2>Transaction History</h2>
+
+        <div id="transactions" class="loading">
+            Loading your transactions...
+        </div>
+
+        <button
+            type="button"
+            id="refreshButton"
+            class="button">
+            🔄 Refresh Transactions
+        </button>
+
+        <a href="services.html" class="button secondary-button">
+            ➕ Request Another Service
+        </a>
+
+    </section>
+
+</main>
+
+<footer>
+    <p>
+        © <span id="year"></span>
+        <strong>MichaelVenture</strong>. All Rights Reserved.
+    </p>
+
+    <p>Professional Digital Services &amp; Business Support.</p>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.getElementById("year").textContent =
+        new Date().getFullYear();
+
+    const box = document.getElementById("transactions");
+    const refreshButton = document.getElementById("refreshButton");
+
+    if (
+        !window.supabase ||
+        !window.SUPABASE_URL ||
+        !window.SUPABASE_KEY
+    ) {
+        box.innerHTML = `
+            <div class="error">
+                <h3>Connection Unavailable</h3>
+                <p>Please check your Supabase configuration and refresh.</p>
+            </div>
+        `;
+        refreshButton.disabled = true;
+        return;
+    }
+
+    const client = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY
+    );
+
+    function safe(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function formatMoney(amount) {
+        return "₦" + Number(amount || 0).toLocaleString("en-NG");
+    }
+
+    function getPaymentClass(status) {
+        const value = String(status || "Unpaid")
+            .trim()
+            .toLowerCase();
+
+        if (["paid", "successful", "completed"].includes(value)) {
+            return "paid";
+        }
+
+        if (value === "refunded") {
+            return "refunded";
+        }
+
+        if (["failed", "cancelled", "canceled"].includes(value)) {
+            return "failed";
+        }
+
+        if (["processing", "pending"].includes(value)) {
+            return value === "pending" ? "" : "processing";
+        }
+
+        return "unpaid";
+    }
+
+    function formatDate(value) {
+        if (!value) return "Not available";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "Not available";
+        }
+
+        return date.toLocaleString("en-NG", {
+            dateStyle: "medium",
+            timeStyle: "short"
+        });
+    }
+
+    async function loadTransactions() {
+
+        box.innerHTML = `
+            <div class="loading">
+                ⏳ Loading your transactions...
+            </div>
+        `;
+
+        refreshButton.disabled = true;
+        refreshButton.textContent = "Loading...";
+
+        try {
+
+            const {
+                data: { session },
+                error: sessionError
+            } = await client.auth.getSession();
+
+            if (sessionError) throw sessionError;
+
+            if (!session) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const { data, error } = await client
+                .from("service_requests")
+                .select("*")
+                .eq("user_id", session.user.id)
+                .order("created_at", { ascending: false });
+
+            if (error) throw error;
+
+            const requests = data || [];
+
+            document.getElementById("totalRequests").textContent =
+                String(requests.length);
+
+            const paidAmount = requests.reduce(function (total, item) {
+
+                const status = String(item.payment_status || "")
+                    .trim()
+                    .toLowerCase();
+
+                if (["paid", "successful"].includes(status)) {
+                    return total + Number(item.service_amount || 0);
+                }
+
+                return total;
+
+            }, 0);
+
+            document.getElementById("paidTotal").textContent =
+                formatMoney(paidAmount);
+
+            if (requests.length === 0) {
+
+                box.innerHTML = `
+                    <div class="empty">
+                        <div style="font-size:42px;">💳</div>
+                        <h3>No Transactions Yet</h3>
+                        <p>Your service requests and payment details will appear here.</p>
+
+                        <a href="services.html" class="button">
+                            Browse Our Services
+                        </a>
+                    </div>
+                `;
+
+                return;
+            }
+
+            box.innerHTML = requests.map(function (item) {
+
+                const paymentStatus = item.payment_status || "Unpaid";
+                const paymentClass = getPaymentClass(paymentStatus);
+
+                return `
+                    <article class="transaction">
+
+                        <h3>
+                            ${safe(item.service_name || "Service Request")}
+                        </h3>
+
+                        <p>
+                            <strong>Amount:</strong>
+                            ${formatMoney(item.service_amount)}
+                        </p>
+
+                        <p>
+                            <strong>Payment Status:</strong>
+                            <span class="status ${paymentClass}">
+                                ${safe(paymentStatus)}
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>Request Status:</strong>
+                            ${safe(item.status || "Pending")}
+                        </p>
+
+                        <p>
+                            <strong>Payment Reference:</strong>
+                            ${safe(item.payment_reference || "Not available")}
+                        </p>
+
+                        <p>
+                            <strong>Date:</strong>
+                            ${safe(formatDate(item.created_at))}
+                        </p>
+
+                    </article>
+                `;
+
+            }).join("");
+
+        } catch (error) {
+
+            console.error("Transaction loading error:", error);
+
+            box.innerHTML = `
+                <div class="error">
+                    <h3>Unable to Load Transactions</h3>
+                    <p>Please check your internet connection and try again.</p>
+
+                    <button
+                        type="button"
+                        id="retryButton"
+                        class="button">
+                        ↻ Try Again
+                    </button>
+                </div>
+            `;
+
+            document.getElementById("retryButton")
+                .addEventListener("click", loadTransactions);
+
+        } finally {
+
+            refreshButton.disabled = false;
+            refreshButton.textContent = "🔄 Refresh Transactions";
+
+        }
+    }
+
+    refreshButton.addEventListener("click", loadTransactions);
+
+    loadTransactions();
+
+});
+</script>
+
+</body>
+</html>

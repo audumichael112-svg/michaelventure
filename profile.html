@@ -1,380 +1,461 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
 
-    <meta charset="UTF-8">
+<title>My Profile | MichaelVenture</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
-    <title>My Profile - MichaelVenture</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #F3F4F6;
+    color: #1E293B;
+    min-height: 100vh;
+    line-height: 1.6;
+}
 
-    <script src="supabase.js"></script>
+/* MICHAELVENTURE WATERMARK */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("logo.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: min(85vw, 500px);
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
+}
 
-    <style>
+.header,
+.container,
+footer {
+    position: relative;
+    z-index: 1;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+.header {
+    background: #FFFFFF;
+    color: #1E293B;
+    text-align: center;
+    padding: 35px 18px;
+    border-bottom: 1px solid #E5E7EB;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #172033;
-        }
+.logo {
+    width: 95px;
+    height: 95px;
+    object-fit: contain;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 20px;
+    padding: 6px;
+    margin-bottom: 12px;
+}
 
-        .header {
-            background: #075c3f;
-            color: white;
-            text-align: center;
-            padding: 45px 20px;
-        }
+.header h1 {
+    font-size: 29px;
+    margin-bottom: 8px;
+}
 
-        .logo {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            background: white;
-            color: #075c3f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: auto;
-            font-size: 42px;
-            font-weight: bold;
-        }
+.header p {
+    color: #64748B;
+    font-size: 15px;
+}
 
-        .header h1 {
-            margin-top: 25px;
-            font-size: 38px;
-        }
+.container {
+    width: 92%;
+    max-width: 650px;
+    margin: 35px auto;
+}
 
-        .header p {
-            margin-top: 10px;
-            font-size: 18px;
-        }
+.card {
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+}
 
-        .container {
-            width: 92%;
-            max-width: 650px;
-            margin: 35px auto;
-        }
+.card h2 {
+    color: #1E293B;
+    margin-bottom: 8px;
+    font-size: 24px;
+}
 
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-        }
+.subtitle {
+    color: #64748B;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
 
-        .card h2 {
-            color: #075c3f;
-            margin-bottom: 25px;
-        }
+.info {
+    background: #F8FAFC;
+    border: 1px solid #E5E7EB;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 17px;
+}
 
-        .info {
-            background: #f5f7fb;
-            padding: 18px;
-            border-radius: 14px;
-            margin-bottom: 16px;
-        }
+.label {
+    color: #64748B;
+    font-size: 13px;
+    margin-bottom: 6px;
+    display: block;
+    font-weight: bold;
+}
 
-        .label {
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 7px;
-        }
+.value {
+    font-size: 16px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
 
-        .value {
-            font-size: 18px;
-            font-weight: bold;
-            word-break: break-word;
-        }
+.status {
+    display: inline-block;
+    background: #DBEAFE;
+    color: #1D4ED8;
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+}
 
-        .active {
-            display: inline-block;
-            background: #e5f7ee;
-            color: #075c3f;
-            padding: 8px 15px;
-            border-radius: 20px;
-        }
+.form-group {
+    margin-bottom: 20px;
+}
 
-        .btn {
-            display: block;
-            width: 100%;
-            border: none;
-            padding: 17px;
-            border-radius: 12px;
-            margin-top: 15px;
-            font-size: 17px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-        }
+.form-group label {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #374151;
+}
 
-        .dashboard {
-            background: #075c3f;
-            color: white;
-        }
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #D1D5DB;
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: #1E293B;
+    font-size: 15px;
+    outline: none;
+}
 
-        .logout {
-            background: #172033;
-            color: white;
-        }
+.form-group input:focus {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
 
-        #loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: #6b7280;
-            font-size: 20px;
-        }
+.form-group input[readonly] {
+    background: #F3F4F6;
+    color: #64748B;
+}
 
-        #error {
-            display: none;
-            background: #ffe8e8;
-            color: #b00020;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            word-break: break-word;
-        }
+.btn {
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
 
-        footer {
-            text-align: center;
-            color: #6b7280;
-            padding: 40px 20px;
-        }
+.btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
 
-        footer strong {
-            color: #075c3f;
-        }
+.save-btn {
+    background: #2563EB;
+    color: #FFFFFF;
+}
 
-    </style>
+.save-btn:hover {
+    background: #1D4ED8;
+}
 
+.dashboard-btn {
+    background: #FFFFFF;
+    color: #1D4ED8;
+    border: 1px solid #BFDBFE;
+}
+
+.logout-btn {
+    background: #E5E7EB;
+    color: #374151;
+}
+
+.message {
+    display: none;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 9px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.message.success {
+    display: block;
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.message.error {
+    display: block;
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+#loading {
+    text-align: center;
+    padding: 50px 15px;
+    color: #64748B;
+    font-size: 17px;
+}
+
+footer {
+    text-align: center;
+    color: #64748B;
+    padding: 30px 15px;
+    font-size: 13px;
+}
+
+footer strong {
+    color: #1E293B;
+}
+
+@media (max-width: 600px) {
+    .header {
+        padding: 28px 15px;
+    }
+
+    .header h1 {
+        font-size: 25px;
+    }
+
+    .container {
+        margin: 25px auto;
+    }
+
+    .card {
+        padding: 22px 18px;
+    }
+}
+</style>
 </head>
-
 
 <body>
 
+<header class="header">
 
-    <div class="header">
+    <img src="logo.png"
+         alt="MichaelVenture Logo"
+         class="logo">
 
-        <div class="logo">
-            MV
-        </div>
+    <h1>My Profile</h1>
 
-        <h1>
-            My Profile
-        </h1>
+    <p>Manage your MichaelVenture account</p>
 
-        <p>
-            Manage your MichaelVenture account
-        </p>
+</header>
 
+<main class="container">
+
+    <div id="loading">
+        Loading your profile...
     </div>
 
+    <div id="profile" style="display:none;">
 
-    <div class="container">
+        <div class="card">
 
-        <div id="loading">
-            Loading your profile...
-        </div>
+            <h2>Account Information</h2>
 
+            <p class="subtitle">
+                Update your personal information below.
+            </p>
 
-        <div id="error"></div>
+            <div id="message" class="message" role="alert"></div>
 
+            <form id="profileForm">
 
-        <div id="profile" style="display:none;">
+                <div class="form-group">
 
-            <div class="card">
+                    <label for="fullName">Full Name</label>
 
-                <h2>
-                    Account Information
-                </h2>
-
-
-                <div class="info">
-
-                    <div class="label">
-                        Full Name
-                    </div>
-
-                    <div class="value"
-                         id="name">
-                        —
-                    </div>
+                    <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        maxlength="100"
+                        required
+                    >
 
                 </div>
 
+                <div class="form-group">
 
-                <div class="info">
+                    <label for="phone">Phone Number</label>
 
-                    <div class="label">
-                        Email Address
-                    </div>
-
-                    <div class="value"
-                         id="email">
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="info">
-
-                    <div class="label">
-                        Account Status
-                    </div>
-
-                    <div class="value">
-
-                        <span class="active">
-                            Active
-                        </span>
-
-                    </div>
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter your phone number"
+                        autocomplete="tel"
+                        maxlength="25"
+                    >
 
                 </div>
 
-
                 <div class="info">
 
-                    <div class="label">
-                        Account Created
-                    </div>
+                    <span class="label">Email Address</span>
 
-                    <div class="value"
-                         id="created">
-                        —
-                    </div>
+                    <div class="value" id="email">—</div>
+
+                    <small style="color:#64748B;">
+                        Your registered email is displayed here.
+                    </small>
 
                 </div>
 
+                <div class="info">
 
-                <a href="dashboard.html"
-                   class="btn dashboard">
+                    <span class="label">Account Status</span>
 
-                    ← Back to Dashboard
+                    <span class="status">Active</span>
 
-                </a>
+                </div>
 
+                <div class="info">
 
-                <button id="logout"
-                        class="btn logout">
+                    <span class="label">Account Created</span>
 
-                    Logout
+                    <div class="value" id="created">—</div>
 
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn save-btn"
+                    id="saveBtn"
+                >
+                    Save Changes
                 </button>
 
-            </div>
+            </form>
+
+            <a href="dashboard.html" class="btn dashboard-btn">
+                ← Back to Dashboard
+            </a>
+
+            <button id="logout" class="btn logout-btn">
+                Logout
+            </button>
 
         </div>
 
     </div>
 
+</main>
 
-    <footer>
-
-        © 2026
-        <strong>MichaelVenture</strong>.
-        All Rights Reserved.
-
-    </footer>
-
+<footer>
+    © <span id="year"></span>
+    <strong>MichaelVenture</strong>. All Rights Reserved.
+</footer>
 
 <script>
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+let client = null;
+let currentUser = null;
+
+const loading = document.getElementById("loading");
+const profile = document.getElementById("profile");
+const messageBox = document.getElementById("message");
+const saveBtn = document.getElementById("saveBtn");
+const profileForm = document.getElementById("profileForm");
+
+function showMessage(text, type) {
+    messageBox.textContent = text;
+    messageBox.className = "message " + type;
+}
+
+function createClient() {
+    if (!window.supabase) {
+        throw new Error(
+            "Supabase did not load. Please check your internet connection."
+        );
+    }
+
+    if (!window.SUPABASE_URL || !window.SUPABASE_KEY) {
+        throw new Error(
+            "Supabase settings are missing from supabase.js."
+        );
+    }
+
+    if (!client) {
+        client = window.supabase.createClient(
+            window.SUPABASE_URL,
+            window.SUPABASE_KEY
+        );
+    }
+
+    return client;
+}
 
 async function startProfile() {
-
     try {
+        const supabaseClient = createClient();
 
-        /* Check Supabase */
+        const { data, error } =
+            await supabaseClient.auth.getSession();
 
-        if (!window.supabase) {
-
-            throw new Error(
-                "Supabase library did not load."
-            );
-
+        if (error) {
+            throw error;
         }
 
-
-        /* Create Supabase client */
-
-        const client =
-            window.supabase.createClient(
-                window.SUPABASE_URL,
-                window.SUPABASE_KEY
-            );
-
-
-        /* Get current session */
-
-        const result =
-            await client.auth.getSession();
-
-
-        if (result.error) {
-
-            throw result.error;
-
-        }
-
-
-        const session =
-            result.data.session;
-
-
-        /* User is not logged in */
-
-        if (!session) {
-
-            window.location.href =
-                "login.html";
-
+        if (!data.session) {
+            window.location.href = "login.html";
             return;
-
         }
 
+        currentUser = data.session.user;
 
-        const user =
-            session.user;
+        const metadata = currentUser.user_metadata || {};
 
+        document.getElementById("fullName").value =
+            metadata.full_name || "";
 
-        /* Get user's name */
+        document.getElementById("phone").value =
+            metadata.phone || "";
 
-        const fullName =
-            user.user_metadata &&
-            user.user_metadata.full_name
-                ? user.user_metadata.full_name
-                : "MichaelVenture User";
+        document.getElementById("email").textContent =
+            currentUser.email || "Not available";
 
-
-        document.getElementById("name")
-            .textContent = fullName;
-
-
-        document.getElementById("email")
-            .textContent =
-                user.email || "Not available";
-
-
-        /* Account creation date */
-
-        if (user.created_at) {
-
-            document.getElementById("created")
-                .textContent =
-                new Date(
-                    user.created_at
-                ).toLocaleDateString(
+        if (currentUser.created_at) {
+            document.getElementById("created").textContent =
+                new Date(currentUser.created_at).toLocaleDateString(
                     "en-NG",
                     {
                         year: "numeric",
@@ -382,88 +463,112 @@ async function startProfile() {
                         day: "numeric"
                     }
                 );
-
         }
 
-
-        /* Hide loading */
-
-        document.getElementById("loading")
-            .style.display = "none";
-
-
-        /* Show profile */
-
-        document.getElementById("profile")
-            .style.display = "block";
-
+        loading.style.display = "none";
+        profile.style.display = "block";
 
     } catch (error) {
-
         console.error(error);
 
-
-        document.getElementById("loading")
-            .style.display = "none";
-
-
-        const errorBox =
-            document.getElementById("error");
-
-
-        errorBox.style.display = "block";
-
-
-        errorBox.innerHTML =
-            "<strong>Profile could not load.</strong><br><br>" +
-            error.message;
-
+        loading.textContent =
+            "Profile could not load: " + error.message;
     }
-
 }
 
+profileForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-/* Logout */
+    if (!currentUser) {
+        showMessage(
+            "Your session has expired. Please log in again.",
+            "error"
+        );
+        return;
+    }
 
-document.getElementById("logout")
-    .addEventListener(
-        "click",
-        async function () {
+    const fullName =
+        document.getElementById("fullName").value.trim();
 
-            try {
+    const phone =
+        document.getElementById("phone").value.trim();
 
-                const client =
-                    window.supabase.createClient(
-                        window.SUPABASE_URL,
-                        window.SUPABASE_KEY
-                    );
+    if (!fullName) {
+        showMessage("Please enter your full name.", "error");
+        return;
+    }
 
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving Changes...";
 
-                await client.auth.signOut();
+    try {
+        const { data, error } = await client.auth.updateUser({
+            data: {
+                full_name: fullName,
+                phone: phone
+            }
+        });
 
+        if (error) {
+            throw error;
+        }
 
-                window.location.href =
-                    "login.html";
+        currentUser = data.user;
 
+        showMessage(
+            "Your profile has been updated successfully!",
+            "success"
+        );
 
-            } catch (error) {
+    } catch (error) {
+        console.error(error);
 
-                alert(
-                    "Logout failed: " +
-                    error.message
-                );
+        showMessage(
+            "Could not save your profile: " + error.message,
+            "error"
+        );
 
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save Changes";
+    }
+});
+
+document.getElementById("logout").addEventListener(
+    "click",
+    async function() {
+
+        const button = this;
+
+        button.disabled = true;
+        button.textContent = "Logging out...";
+
+        try {
+            const supabaseClient = createClient();
+
+            const { error } =
+                await supabaseClient.auth.signOut();
+
+            if (error) {
+                throw error;
             }
 
-        }
-    );
+            window.location.href = "login.html";
 
+        } catch (error) {
+            showMessage(
+                "Logout failed: " + error.message,
+                "error"
+            );
+
+            button.disabled = false;
+            button.textContent = "Logout";
+        }
+    }
+);
 
 startProfile();
-
 </script>
 
-
 </body>
-
 </html>

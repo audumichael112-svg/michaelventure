@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0F172A">
 
-    <title>Admin Login - MichaelVenture</title>
+    <title>Admin Login | MichaelVenture</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
@@ -16,334 +17,523 @@
             padding: 0;
         }
 
+        :root {
+            --navy: #0F172A;
+            --blue: #2563EB;
+            --blue-hover: #1D4ED8;
+            --light-blue: #EFF6FF;
+            --background: #F8FAFC;
+            --white: #FFFFFF;
+            --text: #172554;
+            --muted: #64748B;
+            --border: #DBE4F0;
+        }
+
+        html {
+            min-height: 100%;
+            background: var(--background);
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            position: relative;
             min-height: 100vh;
-            background: #f5f7fb;
+            padding: 25px 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        /* MICHAELVENTURE WATERMARK */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("./logo.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: min(80vw, 500px);
+            opacity: 0.045;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .login-container {
+            position: relative;
+            z-index: 1;
             width: 100%;
-            max-width: 420px;
-            background: white;
-            padding: 35px 25px;
-            border-radius: 18px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            max-width: 440px;
+            padding: 35px 28px;
+            background: rgba(255, 255, 255, 0.97);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(15, 23, 42, 0.09);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .logo {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 18px;
-            border-radius: 50%;
-            background: #0f5132;
-            color: white;
+            width: 85px;
+            height: 85px;
+            padding: 5px;
+            margin: 0 auto 16px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 17px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 25px;
-            font-weight: bold;
+            overflow: hidden;
         }
 
-        h1 {
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand h1 {
+            color: var(--navy);
+            font-size: 25px;
+            margin-bottom: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .brand-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .portal-label {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 7px 13px;
+            border-radius: 30px;
+            background: var(--light-blue);
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .form-title {
+            color: var(--navy);
             text-align: center;
-            color: #172033;
+            font-size: 22px;
             margin-bottom: 8px;
         }
 
         .subtitle {
+            color: var(--muted);
             text-align: center;
-            color: #667085;
-            margin-bottom: 28px;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 27px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 7px;
-            font-weight: bold;
-            color: #344054;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
         }
 
         input {
+            display: block;
             width: 100%;
-            padding: 14px;
-            border: 1px solid #d0d5dd;
-            border-radius: 9px;
-            margin-bottom: 18px;
-            font-size: 16px;
+            min-height: 49px;
+            padding: 13px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--navy);
+            font-size: 15px;
             outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input::placeholder {
+            color: #94A3B8;
         }
 
         input:focus {
-            border-color: #2563eb;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
 
         button {
+            display: block;
             width: 100%;
+            min-height: 50px;
             padding: 14px;
             border: none;
-            border-radius: 9px;
-            background: #0f5132;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
+            border-radius: 10px;
+            background: var(--blue);
+            color: var(--white);
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: var(--blue-hover);
         }
 
         button:disabled {
-            opacity: 0.6;
+            opacity: 0.65;
+            cursor: not-allowed;
         }
 
         .message {
-            margin-top: 18px;
-            padding: 12px;
-            border-radius: 8px;
             display: none;
-            line-height: 1.5;
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
         }
 
         .error {
-            background: #fef2f2;
-            color: #b91c1c;
+            display: block;
+            background: #FEF2F2;
+            color: #B91C1C;
+            border: 1px solid #FECACA;
         }
 
         .success {
-            background: #ecfdf3;
-            color: #027a48;
+            display: block;
+            background: var(--light-blue);
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
         }
 
         .back {
             display: block;
             text-align: center;
-            margin-top: 22px;
-            color: #2563eb;
-            text-decoration: none;
+            margin-top: 24px;
+            color: var(--blue);
             font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            text-decoration: underline;
         }
 
         footer {
-            text-align: center;
+            position: relative;
+            z-index: 1;
             margin-top: 25px;
-            color: #667085;
+            text-align: center;
+            color: var(--muted);
             font-size: 12px;
+            line-height: 1.8;
+        }
+
+        footer strong {
+            color: var(--navy);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 18px 12px;
+            }
+
+            .login-container {
+                padding: 28px 20px;
+                border-radius: 17px;
+            }
+
+            .brand h1 {
+                font-size: 23px;
+            }
+
+            .logo {
+                width: 75px;
+                height: 75px;
+            }
+
+            .form-title {
+                font-size: 21px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-container">
+<div>
 
-    <div class="logo">
-        MV
-    </div>
+    <main class="login-container">
 
-    <h1>Admin Login</h1>
+        <header class="brand">
 
-    <p class="subtitle">
-        MichaelVenture Administrator Portal
-    </p>
+            <div class="logo">
+                <img src="logo.png" alt="MichaelVenture Logo">
+            </div>
 
-    <form id="adminLoginForm">
+            <h1>MichaelVenture</h1>
 
-        <label for="email">
-            Email Address
-        </label>
+            <p class="brand-description">
+                Professional Digital Services &amp; Business Support
+            </p>
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Enter admin email"
-            required
-        >
+            <span class="portal-label">
+                ADMINISTRATOR PORTAL
+            </span>
 
-        <label for="password">
-            Password
-        </label>
+        </header>
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Enter password"
-            required
-        >
+        <h2 class="form-title">Administrator Login</h2>
 
-        <button type="submit" id="loginButton">
-            Login as Administrator
-        </button>
+        <p class="subtitle">
+            Sign in with your authorized administrator account
+            to manage MichaelVenture.
+        </p>
 
-    </form>
+        <form id="adminLoginForm">
 
-    <div id="message" class="message"></div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
 
-    <a href="login.html" class="back">
-        ← Back to Customer Login
-    </a>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter administrator email"
+                    autocomplete="username"
+                    required
+                >
+            </div>
 
-    <footer>
-        © 2026 MichaelVenture. All Rights Reserved.
-    </footer>
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" id="loginButton">
+                Login as Administrator
+            </button>
+
+        </form>
+
+        <div
+            id="message"
+            class="message"
+            role="status"
+            aria-live="polite">
+        </div>
+
+        <a href="login.html" class="back">
+            &larr; Back to Customer Login
+        </a>
+
+        <footer>
+            &copy; <span id="currentYear"></span>
+            <strong>MichaelVenture</strong>. All Rights Reserved.
+            <br>
+            Professional Digital Services &amp; Business Support.
+        </footer>
+
+    </main>
 
 </div>
 
-
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+    const form = document.getElementById("adminLoginForm");
+    const button = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "message " + type;
+    }
+
+    function setLoading(loading) {
+        button.disabled = loading;
+        button.textContent = loading
+            ? "Verifying Administrator..."
+            : "Login as Administrator";
+    }
+
+    if (
+        !window.supabase ||
+        !window.SUPABASE_URL ||
+        !window.SUPABASE_KEY
+    ) {
+        showMessage(
+            "The account service could not load. Please refresh the page.",
+            "error"
+        );
+
+        button.disabled = true;
+        return;
+    }
 
     const client = window.supabase.createClient(
         window.SUPABASE_URL,
         window.SUPABASE_KEY
     );
 
-
-    const form =
-        document.getElementById("adminLoginForm");
-
-    const button =
-        document.getElementById("loginButton");
-
-    const message =
-        document.getElementById("message");
-
-
-    function showMessage(text, type) {
-
-        message.textContent = text;
-
-        message.className =
-            "message " + type;
-
-        message.style.display = "block";
-    }
-
-
-    form.addEventListener("submit", async function(event) {
+    form.addEventListener("submit", async function (event) {
 
         event.preventDefault();
 
-        const email =
-            document.getElementById("email")
-                .value
-                .trim();
+        message.className = "message";
 
-        const password =
-            document.getElementById("password")
-                .value;
+        const email = document.getElementById("email")
+            .value.trim();
 
+        const password = document.getElementById("password")
+            .value;
 
-        button.disabled = true;
-
-        button.textContent = "Checking...";
-
-        message.style.display = "none";
-
-
-        /*
-         * First authenticate the account.
-         */
-
-        const { data, error } =
-            await client.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-
-
-        if (error) {
-
-            console.error(error);
-
+        if (!email || !password) {
             showMessage(
-                "Invalid email or password.",
+                "Please enter your administrator email and password.",
                 "error"
             );
-
-            button.disabled = false;
-
-            button.textContent =
-                "Login as Administrator";
-
             return;
         }
 
+        setLoading(true);
 
-        const user =
-            data.user;
+        try {
 
+            /*
+             * Step 1: Authenticate with Supabase.
+             */
 
-        /*
-         * Now check whether this account
-         * is actually an administrator.
-         */
+            const { data, error } =
+                await client.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
 
-        const { data: admin, error: adminError } =
-            await client
-                .from("admin_users")
-                .select("user_id")
-                .eq("user_id", user.id)
-                .maybeSingle();
+            if (error) {
+                showMessage(
+                    "Login failed. Please check your email and password.",
+                    "error"
+                );
+                return;
+            }
 
+            const user = data.user;
 
-        if (adminError) {
+            if (!user) {
+                await client.auth.signOut();
 
-            console.error(adminError);
+                showMessage(
+                    "Unable to verify your account. Please try again.",
+                    "error"
+                );
+                return;
+            }
 
-            await client.auth.signOut();
+            /*
+             * Step 2: Verify administrator access.
+             * Only users listed in admin_users can continue.
+             */
+
+            const { data: admin, error: adminError } =
+                await client
+                    .from("admin_users")
+                    .select("user_id")
+                    .eq("user_id", user.id)
+                    .maybeSingle();
+
+            if (adminError) {
+                console.error(
+                    "Administrator verification error:",
+                    adminError
+                );
+
+                await client.auth.signOut();
+
+                showMessage(
+                    "Unable to verify administrator access. Please try again.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!admin) {
+                await client.auth.signOut();
+
+                showMessage(
+                    "Access denied. This account is not an authorized administrator.",
+                    "error"
+                );
+                return;
+            }
+
+            /*
+             * Step 3: Administrator verified.
+             */
 
             showMessage(
-                "Unable to verify administrator access.",
+                "Administrator verified successfully. Opening dashboard...",
+                "success"
+            );
+
+            button.textContent = "Opening Dashboard...";
+
+            setTimeout(function () {
+                window.location.href = "admin.html";
+            }, 700);
+
+        } catch (error) {
+
+            console.error("Admin login error:", error);
+
+            showMessage(
+                "A connection error occurred. Please check your internet and try again.",
                 "error"
             );
 
-            button.disabled = false;
+        } finally {
 
-            button.textContent =
-                "Login as Administrator";
+            /*
+             * Keep the button disabled after successful
+             * authentication while the redirect is pending.
+             */
 
-            return;
+            if (
+                !message.classList.contains("success")
+            ) {
+                setLoading(false);
+            }
         }
-
-
-        if (!admin) {
-
-            await client.auth.signOut();
-
-            showMessage(
-                "Access denied. This account is not an administrator.",
-                "error"
-            );
-
-            button.disabled = false;
-
-            button.textContent =
-                "Login as Administrator";
-
-            return;
-        }
-
-
-        /*
-         * Administrator verified.
-         */
-
-        showMessage(
-            "Administrator verified. Opening dashboard...",
-            "success"
-        );
-
-
-        setTimeout(function() {
-
-            window.location.href =
-                "admin.html";
-
-        }, 700);
 
     });
 
+});
 </script>
 
 </body>

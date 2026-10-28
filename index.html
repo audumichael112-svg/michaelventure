@@ -1,87 +1,374 @@
 <!DOCTYPE html>
-<>
+<html lang="en">
 <head>
-    <title>MichaelVenture</title>
-    <link rel="stylesheet"
-      href="style.css">
-  </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MichaelVenture | Digital Services & Business Support</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* HOMEPAGE WATERMARK */
+        html {
+            min-height: 100%;
+            background: #f1f7f3;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            position: relative;
+            isolation: isolate;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("./logo.png");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: min(85vw, 600px);
+            opacity: 0.16;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Keep the header and page content above the watermark */
+        body > header,
+        body > main,
+        body > footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Keep the green header and footer unchanged */
+        .header,
+        .footer {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Let the watermark show through light content sections */
+        .hero,
+        .services-section,
+        .about-section,
+        .contact-section {
+            background-color: transparent;
+        }
+
+        /* Watermark size on mobile phones */
+        @media (max-width: 600px) {
+            body::before {
+                background-size: 90vw auto;
+                opacity: 0.16;
+            }
+        }
+    </style>
+</head>
 
 <body>
 
-    <h1>Welcome to MichaelVenture
-Professional digital services and business support designed to make your work easier.</h1>
+    <!-- HEADER -->
+    <header class="header">
 
-    <p>We offer professional digital and business support services, including website creation, online registration, document processing, CV preparation, research and project support, printing, photocopying, and other online solutions..</p>
+        <div class="logo-area">
 
-    <a href="#services" class="get-started">Get Started</a>
-  <section class="services" id="services">
+            <div class="mv-logo">
+                <svg viewBox="0 0 100 100"
+                     xmlns="http://www.w3.org/2000/svg">
 
-    <h2>Our Services</h2>
+                    <circle cx="50" cy="50" r="46"
+                            fill="white"
+                            stroke="#0a3d1e"
+                            stroke-width="4"/>
 
-    <div class="service-container">
+                    <text x="50" y="63"
+                          text-anchor="middle"
+                          font-family="Arial, sans-serif"
+                          font-size="42"
+                          font-weight="900"
+                          fill="#0a3d1e">MV</text>
 
-        <div class="service-card">
-            <h3>Website Creation</h3>
-            <p>Professional websites for individuals and businesses.</p>
+                    <text x="50" y="82"
+                          text-anchor="middle"
+                          font-family="Arial, sans-serif"
+                          font-size="7"
+                          font-weight="bold"
+                          fill="#111">MICHAELVENTURE</text>
+                </svg>
+            </div>
+
+            <span>MichaelVenture</span>
+
         </div>
 
-        <div class="service-card">
-            <h3>Online Registration</h3>
-            <p>Assistance with reliable online registration and applications.</p>
+        <button class="menu-toggle"
+                onclick="toggleMenu()"
+                aria-label="Toggle navigation menu">☰</button>
+
+        <nav class="navigation" id="mainNavigation">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+            <a href="login.html" class="login-btn">Login</a>
+        </nav>
+
+    </header>
+
+    <!-- HOMEPAGE CONTENT -->
+    <main>
+
+        <!-- HOME -->
+        <section id="home" class="hero">
+
+            <div class="hero-content">
+
+                <p class="small-title">WELCOME TO MICHAELVENTURE</p>
+
+                <h1>
+                    Professional Digital Services
+                    <span>& Business Support</span>
+                </h1>
+
+                <p class="hero-text">
+                    We provide reliable digital services, online registration,
+                    document processing, research support, website creation
+                    and practical business solutions.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#services" class="primary-btn">
+                        Explore Our Services
+                    </a>
+
+                    <a href="#contact" class="secondary-btn">
+                        Contact Us
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services" class="services-section">
+
+            <div class="section-heading">
+
+                <p>WHAT WE OFFER</p>
+
+                <h2>Our Services</h2>
+
+                <span>
+                    Professional solutions designed to make your work easier.
+                </span>
+
+            </div>
+
+            <div class="service-container">
+
+                <div class="service-card">
+                    <div class="service-number">01</div>
+                    <h3>Website Creation</h3>
+                    <p>
+                        Professional and responsive websites for individuals,
+                        businesses and organizations.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">02</div>
+                    <h3>Online Registration</h3>
+                    <p>
+                        Reliable assistance with online registrations,
+                        applications and digital forms.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">03</div>
+                    <h3>Project & Research Support</h3>
+                    <p>
+                        Assistance with academic projects, research proposals,
+                        formatting and document preparation.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">04</div>
+                    <h3>CV & Document Processing</h3>
+                    <p>
+                        Professional CV preparation, typing, editing and
+                        document processing.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">05</div>
+                    <h3>Printing & Photocopying</h3>
+                    <p>
+                        Quality printing, photocopying and other document
+                        services.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">06</div>
+                    <h3>Digital Business Support</h3>
+                    <p>
+                        Practical digital solutions that help businesses
+                        operate more efficiently.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="about-section">
+
+            <div class="about-image">
+    <img
+        src="founder.jpg"
+        alt="MichaelVenture Founder"
+        class="founder-photo"
+    >
+    <p class="founder-caption">Founder, MichaelVenture</p>
+            </div>
+
+            <div class="about-content">
+
+                <p class="section-label">ABOUT MICHAELVENTURE</p>
+
+                <h2>Digital Solutions Built With Purpose.</h2>
+
+                <p>
+                    MichaelVenture is a digital services and business support
+                    brand focused on helping individuals, students and
+                    businesses handle their digital and documentation needs
+                    more efficiently.
+                </p>
+
+                <p>
+                    From online registration and document processing to
+                    research support, website creation and business assistance,
+                    our goal is to provide practical and reliable solutions.
+                </p>
+
+                <div class="about-points">
+
+                    <div>
+                        <strong>Reliable</strong>
+                        <span>Professional service delivery</span>
+                    </div>
+
+                    <div>
+                        <strong>Digital</strong>
+                        <span>Modern technology solutions</span>
+                    </div>
+
+                    <div>
+                        <strong>Growth</strong>
+                        <span>Solutions designed to help you move forward</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="contact-section">
+
+            <div class="section-heading">
+
+                <p>LET'S WORK TOGETHER</p>
+
+                <h2>Get In Touch</h2>
+
+                <span>
+                    Need a digital service or business support?
+                    MichaelVenture is ready to help.
+                </span>
+
+            </div>
+
+            <div class="contact-box">
+
+                <div class="contact-item">
+                    <h3>WhatsApp</h3>
+                    <p>09162828702</p>
+
+                    <a href="https://wa.me/2349162828702"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        Chat With Us
+                    </a>
+                </div>
+
+                <div class="contact-item">
+                    <h3>Email</h3>
+                    <p>audumichael112@gmail.com</p>
+
+                    <a href="mailto:audumichael112@gmail.com">
+                        Send Email
+                    </a>
+                </div>
+
+                <div class="contact-item">
+                    <h3>Account</h3>
+
+                    <p>
+                        Create an account to access
+                        MichaelVenture services.
+                    </p>
+
+                    <a href="register.html">
+                        Create Account
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <img src="logo.png" alt="MichaelVenture Logo">
+
+        <h3>MichaelVenture</h3>
+
+        <p>
+            Professional digital services & business support.
+        </p>
+
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
         </div>
 
-        <div class="service-card">
-            <h3>Project & Research Support</h3>
-            <p>Support with academic projects, research proposals and documents.</p>
-        </div>
+        <p class="copyright">
+            © 2026 MichaelVenture. All rights reserved.
+        </p>
 
-        <div class="service-card">
-            <h3>CV & Document Processing</h3>
-            <p>Professional CV preparation, typing and document processing.</p>
-        </div>
+    </footer>
 
-        <div class="service-card">
-            <h3>Printing & Photocopying</h3>
-            <p>Quality printing, photocopying and document services.</p>
-        </div>
-
-        <div class="service-card">
-            <h3>Digital Business Support</h3>
-            <p>Practical digital solutions to help businesses work more efficiently.</p>
-        </div>
-
-    </div>
-
-  </><section class="contact" id="contact">
-
-    <h2>Get in Touch</h2>
-
-    <p>
-        Need a digital service or business support?
-        Contact MichaelVenture today.
-    </p>
-
-    <a href="https://wa.me/2349162828702" class="contact-button">
-        Chat with us on WhatsApp
-    </a>
-
-    <p>Email: audumichael112@gmail.com</p>
-    <p>WhatsApp: 09162828702</p>
-
-  </section>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("mainNavigation");
+            menu.classList.toggle("active");
+        }
+    </script>
 
 </body>
-        <nav>
-              <h2>MichaelVenture</h2>
-
-    <nav>
-    <h2>MichaelVenture</h2>
-
-    <div>
-        <a href="#">Home</a>
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <a href="register.html">Create Account</a>
-    </div>
-    </nav>
+</html>
